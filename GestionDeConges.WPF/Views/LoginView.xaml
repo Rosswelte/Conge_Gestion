@@ -1,0 +1,21 @@
+﻿<Window x:Class="GestionDeConges.WPF.Views.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Connexion - Gestion de Congés" Height="450" Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+
+    <Grid>
+        <materialDesign:Card Margin="20" Padding="20">
+            <StackPanel>
+                <TextBlock Text="Connexion" FontSize="24" HorizontalAlignment="Center" Margin="0,0,0,30"/>
+
+                <TextBox x:Name="txtUsername" materialDesign:HintAssist.Hint="Nom d'utilisateur" Margin="0,10"/>
+                <PasswordBox x:Name="txtPassword" materialDesign:HintAssist.Hint="Mot de passe" Margin="0,10"/>
+
+                <Button Content="Se connecter" Click="BtnLogin_Click" Margin="0,20,0,0" Height="40"/>
+            </StackPanel>
+        </materialDesign:Card>
+    </Grid>
+</Window>
