@@ -1,25 +1,54 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0-windows7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<RootNamespace>GestionDeConges.WPF</RootNamespace>
+		<!-- CORRECTION : déclaration explicite de App.xaml comme ApplicationDefinition -->
+		<ApplicationDefinition>App.xaml</ApplicationDefinition>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.2" />
-    <PackageReference Include="MaterialDesignColors" Version="5.3.2" />
-    <PackageReference Include="MaterialDesignThemes" Version="5.3.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
-  </ItemGroup>
+	<!-- CORRECTION : App.xaml déclaré comme ApplicationDefinition (pas Page) -->
+	<ItemGroup>
+		<ApplicationDefinition Include="App.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</ApplicationDefinition>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\GestionDeConges.core\GestionDeConges.Core.csproj" />
-    <ProjectReference Include="..\GestionDeConges.Data\GestionDeConges.Data.csproj" />
-    <ProjectReference Include="..\GestionDeConges.Services\GestionDeConges.Services.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<!-- Material Design In Xaml Toolkit -->
+		<PackageReference Include="MaterialDesignThemes" Version="5.3.2" />
+		<PackageReference Include="MaterialDesignColors" Version="5.3.2" />
+
+		<!-- MVVM CommunityToolkit -->
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+
+		<!-- Injection de dépendances -->
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
+
+		<!-- EF Core (pour l'injection AppDbContext) -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+
+		<!-- Graphiques LiveCharts2 -->
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.2" />
+
+		<!-- Export -->
+		<PackageReference Include="QuestPDF" Version="2026.2.4" />
+		<PackageReference Include="ClosedXML" Version="0.105.0" />
+
+		<!-- Sécurité mot de passe -->
+		<PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\GestionDeConges.Core\GestionDeConges.Core.csproj" />
+		<ProjectReference Include="..\GestionDeConges.Data\GestionDeConges.Data.csproj" />
+		<ProjectReference Include="..\GestionDeConges.Services\GestionDeConges.Services.csproj" />
+	</ItemGroup>
 
 </Project>
