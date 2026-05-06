@@ -56,4 +56,14 @@ public partial class LoginView : Window
             this.Close();
         }
     }
+
+    private void BtnCreerAdmin_Click(object sender, RoutedEventArgs e)
+    {
+        var authService = App.Services.GetRequiredService<IAuthService>();
+        var dialog = new RegisterAdminDialog(authService)
+        {
+            Owner = this
+        };
+        dialog.ShowDialog();
+    }
 }

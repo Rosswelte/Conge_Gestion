@@ -19,7 +19,7 @@ public record ResultatOperation(bool Succes, string? Erreur = null)
 public interface IAuthService
 {
     Task<ResultatOperation<Utilisateur>> ConnecterAsync(string nomUtil, string motDePasse);
-    Task<ResultatOperation> CreerAdminAsync(string nomUtil, string motDePasse);
+    Task<ResultatOperation> CreerAdminAsync(string nomUtil, string motDePasse, string? codeSecret = null);
     Task<ResultatOperation> ChangerMotDePasseAsync(int idUtil, string ancien, string nouveau);
     Utilisateur? UtilisateurCourant { get; }
     void Deconnecter();

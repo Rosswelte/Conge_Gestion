@@ -40,10 +40,18 @@ public class AuthService(IUnitOfWork uow) : IAuthService
         return ResultatOperation<Utilisateur>.Ok(util);
     }
 
-    public async Task<ResultatOperation> CreerAdminAsync(string nomUtil, string motDePasse)
+    public async Task<ResultatOperation> CreerAdminAsync(string nomUtil, string motDePasse, string? codeSecret = null)
     {
         if (string.IsNullOrWhiteSpace(nomUtil) || motDePasse.Length < 6)
             return ResultatOperation.Echec("Nom requis et mot de passe ≥ 6 caractères.");
+
+        // Vérification du code secret s'il est fourni
+        if (!string.IsNullOrWhiteSpace(codeSecret))
+        {
+            const string CODE_SECRET_ATTENDU = "ADMIN2024";
+            if (codeSecret != CODE_SECRET_ATTENDU)
+                return ResultatOperation.Echec("Code secret administrateur incorrect.");
+        }
 
         var existant = await _uow.Utilisateurs.GetParNomAsync(nomUtil.Trim());
         if (existant is not null)
@@ -53,11 +61,12 @@ public class AuthService(IUnitOfWork uow) : IAuthService
         var admin = new Utilisateur
         {
             NomUtilisateur = nomUtil.Trim(),
-            MotDePasse     = hash,
-            Role           = RoleUtilisateur.Admin
+            MotDePasse = hash,
+            Role = RoleUtilisateur.Admin
         };
         await _uow.Utilisateurs.AddAsync(admin);
         await _uow.SaveChangesAsync();
+
         return ResultatOperation.Ok();
     }
 

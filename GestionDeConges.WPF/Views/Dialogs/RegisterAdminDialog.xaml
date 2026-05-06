@@ -1,0 +1,85 @@
+﻿<Window x:Class="GestionDeConges.WPF.Views.Dialogs.RegisterAdminDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Inscription Administrateur"
+        Height="450" Width="420"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource BgPageBrush}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Titre -->
+        <TextBlock Grid.Row="0"
+                   Text="🔐 Créer un compte Administrateur"
+                   FontSize="16" FontWeight="Bold"
+                   Foreground="{StaticResource PrimaryBrush}"
+                   Margin="0 0 0 12"/>
+
+        <TextBlock Grid.Row="1"
+                   Text="Un code secret est requis pour créer un compte admin."
+                   FontSize="12"
+                   Foreground="{StaticResource TextMutedBrush}"
+                   TextWrapping="Wrap"
+                   Margin="0 0 0 16"/>
+
+        <!-- Nom d'utilisateur -->
+        <TextBox Grid.Row="2"
+                 x:Name="TxtNomUtilisateur"
+                 materialDesign:HintAssist.Hint="Nom d'utilisateur"
+                 materialDesign:HintAssist.IsFloating="True"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                 Margin="0 0 0 12"/>
+
+        <!-- Mot de passe -->
+        <PasswordBox Grid.Row="3"
+                     x:Name="TxtMotDePasse"
+                     materialDesign:HintAssist.Hint="Mot de passe (min. 6 caractères)"
+                     materialDesign:HintAssist.IsFloating="True"
+                     Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                     Margin="0 0 0 12"/>
+
+        <!-- Code secret admin -->
+        <PasswordBox Grid.Row="4"
+                     x:Name="TxtCodeSecret"
+                     materialDesign:HintAssist.Hint="Code secret administrateur"
+                     materialDesign:HintAssist.IsFloating="True"
+                     Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                     Margin="0 0 0 16"/>
+
+        <!-- Message d'erreur -->
+        <TextBlock Grid.Row="5"
+                   x:Name="TxtErreur"
+                   Text=""
+                   Foreground="Red" FontSize="12"
+                   TextWrapping="Wrap"
+                   Visibility="Collapsed"
+                   Margin="0 0 0 12"/>
+
+        <!-- Boutons -->
+        <StackPanel Grid.Row="7" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="Annuler"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Width="90" Margin="0 0 8 0"
+                    Click="BtnAnnuler_Click"/>
+            <Button x:Name="BtnCreer"
+                    Content="Créer le compte"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Width="140"
+                    Click="BtnCreer_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

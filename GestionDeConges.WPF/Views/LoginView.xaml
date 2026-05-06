@@ -4,7 +4,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vm="clr-namespace:GestionDeConges.WPF.ViewModels"
         Title="Connexion — Gestion des Congés"
-        Height="520" Width="420"
+        Height="575" Width="420"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="{StaticResource BgPageBrush}"
@@ -76,12 +76,20 @@
                         Foreground="{StaticResource PrimaryBrush}"
                         BorderBrush="{StaticResource PrimaryBrush}"
                         Click="BtnEmploye_Click"/>
+                
+                <!-- Bouton inscription admin -->
+                <Button Content="🔧  Créer un compte Administrateur"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Height="36" Margin="0 6 0 0"
+                        Foreground="{StaticResource TextMutedBrush}"
+                        FontSize="11"
+                        Click="BtnCreerAdmin_Click"/>
+
 
                 <!-- Spinner chargement -->
                 <ProgressBar IsIndeterminate="True" Height="3"
-                             Margin="0 8 0 0"
-                             Visibility="{Binding IsBusy,
-                                 Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Margin="0 8 0 0"
+                        Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
             </StackPanel>
         </Border>
     </Grid>
