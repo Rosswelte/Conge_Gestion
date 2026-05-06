@@ -12,15 +12,44 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         FontFamily="{DynamicResource MaterialDesignFont}">
 
+    <Window.Resources>
+        <!--
+            ╔══════════════════════════════════════════════════════════════╗
+            ║  DataTemplates — Associe chaque ViewModel à sa View (Page)  ║
+            ║  Le ContentControl de la zone principale résout ces         ║
+            ║  templates automatiquement selon le type de PageActive.     ║
+            ╚══════════════════════════════════════════════════════════════╝
+        -->
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <pages:DashboardPage/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:DemandesViewModel}">
+            <pages:DemandesPage/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:EmployesViewModel}">
+            <pages:EmployesPage/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:PostesViewModel}">
+            <pages:PostesPage/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:HistoriqueViewModel}">
+            <pages:HistoriquePage/>
+        </DataTemplate>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- ═══════════════════════════════════════════════════════════════════
+        <!-- ═══════════════════════════════════════════════════════════════
              SIDEBAR
-        ════════════════════════════════════════════════════════════════════ -->
+        ════════════════════════════════════════════════════════════════ -->
         <Border Grid.Column="0"
                 Background="{StaticResource PrimaryBrush}">
             <DockPanel>
@@ -69,9 +98,9 @@
             </DockPanel>
         </Border>
 
-        <!-- ═══════════════════════════════════════════════════════════════════
-             CONTENU PRINCIPAL (zone de page)
-        ════════════════════════════════════════════════════════════════════ -->
+        <!-- ═══════════════════════════════════════════════════════════════
+             CONTENU PRINCIPAL
+        ════════════════════════════════════════════════════════════════ -->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -87,8 +116,12 @@
                            FontSize="12"/>
             </Border>
 
-            <!-- Zone de navigation (ContentControl) -->
-            <!-- Chaque page est un UserControl chargé dynamiquement -->
+            <!--
+                Zone de navigation.
+                Le ContentControl utilise les DataTemplates déclarés
+                en Window.Resources pour afficher la bonne page
+                en fonction du type de PageActive (ViewModel).
+            -->
             <ContentControl Grid.Row="1"
                             x:Name="PageContent"
                             Content="{Binding PageActive}"

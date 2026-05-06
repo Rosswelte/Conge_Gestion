@@ -2,9 +2,9 @@
 
 namespace GestionDeConges.WPF.Views.Pages
 {
-    public partial class DashboardPage : UserControl
+    public partial class HistoriquePage : UserControl
     {
-        public DashboardPage()
+        public HistoriquePage()
         {
             InitializeComponent();
         }

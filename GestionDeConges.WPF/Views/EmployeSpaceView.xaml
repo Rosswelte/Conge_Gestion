@@ -11,16 +11,6 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         FontFamily="{DynamicResource MaterialDesignFont}">
 
-    <Window.Resources>
-        <conv:StatutToBrushConverter      x:Key="StatutToBrushConverter"/>
-        <conv:StatutToForegroundConverter x:Key="StatutToForegroundConverter"/>
-        <conv:StatutToLibelleConverter    x:Key="StatutToLibelleConverter"/>
-        <conv:BoolToVisibilityConverter   x:Key="BoolToVisibilityConverter"/>
-        <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-        <conv:DateOnlyToStringConverter   x:Key="DateOnlyToStringConverter"/>
-        <conv:SoldeToColorConverter       x:Key="SoldeToColorConverter"/>
-    </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

@@ -1,12 +1,161 @@
-﻿<Window x:Class="GestionDeConges.WPF.Views.Pages.DashboardPage"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GestionDeConges.WPF.Views.Pages"
-        mc:Ignorable="d"
-        Title="DashboardPage" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
-</Window>
+﻿<UserControl x:Class="GestionDeConges.WPF.Views.Pages.DashboardPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:conv="clr-namespace:GestionDeConges.WPF.Converters"
+             Background="{StaticResource BgPageBrush}">
+
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+
+            <!-- Titre -->
+            <TextBlock Text="📊 Tableau de bord"
+                       FontSize="22" FontWeight="Bold"
+                       Foreground="{StaticResource PrimaryBrush}"
+                       Margin="0 0 0 4"/>
+            <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now},
+                                      StringFormat='Année {0:yyyy}'}"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       FontSize="13" Foreground="{StaticResource TextMutedBrush}"
+                       Margin="0 0 0 24"/>
+
+            <!-- Spinner -->
+            <ProgressBar IsIndeterminate="True" Height="4" Margin="0 0 0 16"
+                         Visibility="{Binding IsBusy,
+                             Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- ── Cartes KPI ─────────────────────────────────────────── -->
+            <UniformGrid Columns="3" Margin="0 0 0 24">
+
+                <!-- Total demandes -->
+                <Border Style="{StaticResource CardStyle}" Margin="0 0 12 0">
+                    <StackPanel>
+                        <TextBlock Text="📋 Total demandes"
+                                   FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
+                        <TextBlock Text="{Binding TotalDemandes}"
+                                   FontSize="36" FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryBrush}"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Employés actifs -->
+                <Border Style="{StaticResource CardStyle}" Margin="6 0">
+                    <StackPanel>
+                        <TextBlock Text="👥 Employés actifs"
+                                   FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
+                        <TextBlock Text="{Binding TotalEmployes}"
+                                   FontSize="36" FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryBrush}"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Employés en congé -->
+                <Border Style="{StaticResource CardStyle}" Margin="12 0 0 0">
+                    <StackPanel>
+                        <TextBlock Text="🏖️ En congé aujourd'hui"
+                                   FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
+                        <TextBlock Text="{Binding EmployesEnConge}"
+                                   FontSize="36" FontWeight="Bold"
+                                   Foreground="#E67E22"
+                                   Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- ── Statuts des demandes ───────────────────────────────── -->
+            <Border Style="{StaticResource CardStyle}" Margin="0 0 0 24">
+                <StackPanel>
+                    <TextBlock Text="Répartition des demandes"
+                               FontSize="15" FontWeight="Bold"
+                               Margin="0 0 0 16"/>
+
+                    <UniformGrid Columns="3">
+
+                        <!-- En attente -->
+                        <Border Background="{StaticResource PendingBrush}"
+                                CornerRadius="10" Padding="16 12" Margin="0 0 8 0">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="⏳ En attente"
+                                           FontSize="12" HorizontalAlignment="Center"
+                                           Foreground="{StaticResource PendingFgBrush}"/>
+                                <TextBlock Text="{Binding EnAttente}"
+                                           FontSize="30" FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{StaticResource PendingFgBrush}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Approuvées -->
+                        <Border Background="{StaticResource ApprovedBrush}"
+                                CornerRadius="10" Padding="16 12" Margin="4 0">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="✅ Approuvées"
+                                           FontSize="12" HorizontalAlignment="Center"
+                                           Foreground="{StaticResource ApprovedFgBrush}"/>
+                                <TextBlock Text="{Binding Approuvees}"
+                                           FontSize="30" FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{StaticResource ApprovedFgBrush}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Refusées -->
+                        <Border Background="{StaticResource RejectedBrush}"
+                                CornerRadius="10" Padding="16 12" Margin="8 0 0 0">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="❌ Refusées"
+                                           FontSize="12" HorizontalAlignment="Center"
+                                           Foreground="{StaticResource RejectedFgBrush}"/>
+                                <TextBlock Text="{Binding Refusees}"
+                                           FontSize="30" FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{StaticResource RejectedFgBrush}"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- ── Top consommateurs ─────────────────────────────────── -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="🏆 Top consommateurs de congés"
+                               FontSize="15" FontWeight="Bold"
+                               Margin="0 0 0 12"/>
+
+                    <DataGrid ItemsSource="{Binding Statistiques.TopConsommateurs}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              BorderThickness="0"
+                              GridLinesVisibility="Horizontal"
+                              RowHeaderWidth="0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Employé"
+                                Binding="{Binding Employe}" Width="*"/>
+                            <DataGridTextColumn Header="Type de congé"
+                                Binding="{Binding TypeConge}" Width="160"/>
+                            <DataGridTextColumn Header="Jours pris"
+                                Binding="{Binding JoursPris}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- Bouton rafraîchir -->
+            <Button Content="🔄  Actualiser"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Width="160" HorizontalAlignment="Left"
+                    Margin="0 20 0 0"
+                    Command="{Binding ChargerCommand}"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

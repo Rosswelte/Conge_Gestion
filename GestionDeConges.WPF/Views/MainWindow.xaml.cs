@@ -15,20 +15,14 @@ public partial class MainWindow : Window
         _vm = vm;
         DataContext = _vm;
 
-        // Charger la page dashboard par défaut au démarrage
+        // Naviguer vers le dashboard par défaut dès l'ouverture
         Loaded += async (_, _) =>
-        {
-            _vm.NaviguerDashboardCommand.Execute(null);
-            // Charger les données du dashboard
-            if (_vm.PageActive is DashboardViewModel dash)
-                await dash.ChargerAsync();
-        };
+            await _vm.NaviguerDashboardCommand.ExecuteAsync(null);
     }
 
-    // Déconnexion : ferme cette fenêtre après que le ViewModel a ouvert LoginView
+    // Ferme MainWindow après que le ViewModel a ouvert LoginView
     private void BtnDeconnexion_Click(object sender, RoutedEventArgs e)
     {
-        // Le ViewModel ouvre déjà LoginView, on ferme juste MainWindow
         this.Close();
     }
 }

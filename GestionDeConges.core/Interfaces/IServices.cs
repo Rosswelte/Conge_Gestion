@@ -35,6 +35,7 @@ public interface IEmployeService
     Task<ResultatOperation<Employe>> CreerAsync(Employe employe);
     Task<ResultatOperation<Employe>> ModifierAsync(Employe employe);
     Task<ResultatOperation> SupprimerAsync(int id);
+    Task<ResultatOperation> SupprimerAsync(int id, int suppresseurId); // ← AJOUTER
     Task<ResultatOperation> RestaurerAsync(int id);
 }
 

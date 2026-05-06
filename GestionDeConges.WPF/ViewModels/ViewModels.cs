@@ -10,34 +10,6 @@ namespace GestionDeConges.WPF.ViewModels;
 
 // ── MainViewModel ─────────────────────────────────────────────────────────────
 /// <summary>ViewModel de la fenêtre principale admin (navigation sidebar).</summary>
-public partial class MainViewModel : BaseViewModel
-{
-    private readonly SessionService _session;
-
-    public MainViewModel(SessionService session)
-    {
-        _session = session;
-        NomAdmin = session.UtilisateurCourant?.NomUtilisateur ?? "Admin";
-    }
-
-    [ObservableProperty] private string _nomAdmin = string.Empty;
-    [ObservableProperty] private BaseViewModel? _pageActive;
-
-    [RelayCommand] private void NaviguerDashboard() => PageActive = App.Services.GetService<DashboardViewModel>()! as BaseViewModel;
-    [RelayCommand] private void NaviguerDemandes() => PageActive = App.Services.GetService<DemandesViewModel>()! as BaseViewModel;
-    [RelayCommand] private void NaviguerEmployes() => PageActive = App.Services.GetService<EmployesViewModel>()! as BaseViewModel;
-    [RelayCommand] private void NaviguerPostes() => PageActive = App.Services.GetService<PostesViewModel>()! as BaseViewModel;
-    [RelayCommand] private void NaviguerHistorique() => PageActive = App.Services.GetService<HistoriqueViewModel>()! as BaseViewModel;
-
-    [RelayCommand]
-    private void SeDeconnecter()
-    {
-        _session.FermerSession();
-        var login = App.Services.GetRequiredService<GestionDeConges.WPF.Views.LoginView>();
-        login.Show();
-        // Fermer MainWindow est géré dans le code-behind
-    }
-}
 
 // ── DashboardViewModel ────────────────────────────────────────────────────────
 public partial class DashboardViewModel : BaseViewModel
@@ -142,6 +114,7 @@ public partial class DemandesViewModel : BaseViewModel
 }
 
 // ── EmployesViewModel ─────────────────────────────────────────────────────────
+
 public partial class EmployesViewModel : BaseViewModel
 {
     private readonly IEmployeService _employeService;
@@ -184,7 +157,12 @@ public partial class EmployesViewModel : BaseViewModel
     private async Task SupprimerAsync()
     {
         if (EmployeSelectionne is null) return;
-        var r = await _employeService.SupprimerAsync(EmployeSelectionne.Id);
+
+        // CORRECTION : on passe l'id réel de l'admin connecté
+        var r = await _employeService.SupprimerAsync(
+            EmployeSelectionne.Id,
+            _session.IdCourant);
+
         if (r.Succes) await ChargerAsync();
         else Erreur = r.Erreur ?? "Erreur";
     }
@@ -199,10 +177,7 @@ public partial class EmployesViewModel : BaseViewModel
     }
 
     partial void OnFiltreRechercheChanged(string value)
-    {
-        // Auto-recherche dès que le filtre change (debounce géré par WPF)
-        _ = ChargerAsync();
-    }
+        => _ = ChargerAsync();
 }
 
 // ── PostesViewModel ───────────────────────────────────────────────────────────

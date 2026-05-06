@@ -1,0 +1,141 @@
+﻿<UserControl x:Class="GestionDeConges.WPF.Views.Pages.PostesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{StaticResource BgPageBrush}">
+
+    <!-- Resources supprimé -->
+
+    <DockPanel Margin="24">
+
+        <!-- En-tête -->
+        <StackPanel DockPanel.Dock="Top" Margin="0 0 0 16">
+            <TextBlock Text="🏢 Gestion des postes"
+                       FontSize="22" FontWeight="Bold"
+                       Foreground="{StaticResource PrimaryBrush}"/>
+            <StackPanel Orientation="Horizontal" Margin="0 12 0 0">
+                <ToggleButton Content="🗂  Afficher supprimés"
+                              IsChecked="{Binding AfficherHistorique}"
+                              Style="{StaticResource MaterialDesignOutlinedButton}"
+                              Margin="0 0 8 0" Padding="12 0" Height="36"
+                              Foreground="{StaticResource PrimaryBrush}"
+                              BorderBrush="{StaticResource PrimaryBrush}"/>
+                <Button Content="🔄  Actualiser"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Height="36" Padding="12 0"
+                        Command="{Binding ChargerCommand}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Spinner -->
+        <ProgressBar DockPanel.Dock="Top"
+                     IsIndeterminate="True" Height="4" Margin="0 0 0 8"
+                     Visibility="{Binding IsBusy,
+                         Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+        <!-- Erreur -->
+        <Border DockPanel.Dock="Top"
+                Background="#FCEBEB" CornerRadius="6" Padding="12 8" Margin="0 0 0 12"
+                Visibility="{Binding Erreur,
+                    Converter={StaticResource StringToVisibilityConverter}}">
+            <TextBlock Text="{Binding Erreur}" Foreground="#501313"/>
+        </Border>
+
+        <!-- Postes actifs ★ CORRIGÉ : sans Style= sur l'élément -->
+        <Border CornerRadius="10" Background="White" Padding="16">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AfficherHistorique}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="Postes actifs"
+                           FontSize="15" FontWeight="Bold"
+                           Foreground="{StaticResource PrimaryBrush}"
+                           Margin="0 0 0 12"/>
+
+                <DataGrid ItemsSource="{Binding Postes}"
+                          SelectedItem="{Binding PosteSelectionne}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False" IsReadOnly="True"
+                          BorderThickness="0" GridLinesVisibility="Horizontal"
+                          RowHeaderWidth="0" SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Poste"
+                            Binding="{Binding Nom}" Width="*"/>
+                        <DataGridTextColumn Header="Département"
+                            Binding="{Binding Departement.Nom}" Width="160"/>
+                        <DataGridTextColumn Header="Min. employés"
+                            Binding="{Binding NbMinEmployes}" Width="120"/>
+                        <DataGridTemplateColumn Header="Action" Width="110">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="🗑 Supprimer"
+                                            FontSize="11" Padding="6 2"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                                            Foreground="Red" BorderBrush="Red"
+                                            Command="{Binding DataContext.SupprimerCommand,
+                                                RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Border>
+
+        <!-- Postes supprimés ★ CORRIGÉ : sans Style= sur l'élément -->
+        <Border CornerRadius="10" Background="White" Padding="16">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AfficherHistorique}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="🗂 Postes archivés"
+                           FontSize="15" FontWeight="Bold"
+                           Foreground="{StaticResource PrimaryBrush}"
+                           Margin="0 0 0 12"/>
+
+                <DataGrid ItemsSource="{Binding Supprimes}"
+                          SelectedItem="{Binding PosteSelectionne}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False" IsReadOnly="True"
+                          BorderThickness="0" GridLinesVisibility="Horizontal"
+                          RowHeaderWidth="0" SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Poste"
+                            Binding="{Binding Nom}" Width="*"/>
+                        <DataGridTextColumn Header="Département"
+                            Binding="{Binding Departement.Nom}" Width="160"/>
+                        <DataGridTemplateColumn Header="Action" Width="110">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="♻ Restaurer"
+                                            FontSize="11" Padding="6 2"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                                            Foreground="#1D9E75" BorderBrush="#1D9E75"
+                                            Command="{Binding DataContext.RestaurerCommand,
+                                                RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Border>
+
+    </DockPanel>
+</UserControl>

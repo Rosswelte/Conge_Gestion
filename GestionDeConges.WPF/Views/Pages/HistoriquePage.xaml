@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="GestionDeConges.WPF.Views.Pages.HistoriquePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:conv="clr-namespace:GestionDeConges.WPF.Converters"
+             Background="{StaticResource BgPageBrush}">
+
+   
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+
+            <TextBlock Text="🗂 Historique — Éléments archivés"
+                       FontSize="22" FontWeight="Bold"
+                       Foreground="{StaticResource PrimaryBrush}"
+                       Margin="0 0 0 4"/>
+
+            <Button Content="🔄  Actualiser"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    HorizontalAlignment="Left"
+                    Height="36" Padding="12 0" Margin="0 12 0 24"
+                    Command="{Binding ChargerCommand}"/>
+
+            <ProgressBar IsIndeterminate="True" Height="4" Margin="0 0 0 16"
+                         Visibility="{Binding IsBusy,
+                             Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- Employés supprimés -->
+            <Border Style="{StaticResource CardStyle}" Margin="0 0 0 20">
+                <StackPanel>
+                    <TextBlock Text="👥 Employés supprimés"
+                               FontSize="15" FontWeight="Bold"
+                               Foreground="{StaticResource PrimaryBrush}"
+                               Margin="0 0 0 12"/>
+                    <DataGrid ItemsSource="{Binding EmployesSupprimes}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False" IsReadOnly="True"
+                              BorderThickness="0" GridLinesVisibility="Horizontal"
+                              RowHeaderWidth="0" MaxHeight="220">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nom" Binding="{Binding NomComplet}" Width="*"/>
+                            <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"/>
+                            <DataGridTextColumn Header="Poste" Binding="{Binding Poste.Nom}" Width="140"/>
+                            <DataGridTextColumn Header="Supprimé le"
+                                Binding="{Binding SupprimeLe, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                Width="110"/>
+                            <DataGridTemplateColumn Header="" Width="110">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="♻ Restaurer"
+                                                FontSize="11" Padding="6 2"
+                                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                Foreground="#1D9E75" BorderBrush="#1D9E75"
+                                                Command="{Binding DataContext.RestaurerEmployeCommand,
+                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- Postes supprimés -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="🏢 Postes supprimés"
+                               FontSize="15" FontWeight="Bold"
+                               Foreground="{StaticResource PrimaryBrush}"
+                               Margin="0 0 0 12"/>
+                    <DataGrid ItemsSource="{Binding PostesSupprimes}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False" IsReadOnly="True"
+                              BorderThickness="0" GridLinesVisibility="Horizontal"
+                              RowHeaderWidth="0" MaxHeight="220">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Poste" Binding="{Binding Nom}" Width="*"/>
+                            <DataGridTextColumn Header="Département"
+                                Binding="{Binding Departement.Nom}" Width="160"/>
+                            <DataGridTextColumn Header="Supprimé le"
+                                Binding="{Binding SupprimeLe, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                Width="110"/>
+                            <DataGridTemplateColumn Header="" Width="110">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="♻ Restaurer"
+                                                FontSize="11" Padding="6 2"
+                                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                Foreground="#1D9E75" BorderBrush="#1D9E75"
+                                                Command="{Binding DataContext.RestaurerPosteCommand,
+                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
