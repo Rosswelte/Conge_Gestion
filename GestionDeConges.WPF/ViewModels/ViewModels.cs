@@ -162,8 +162,6 @@ public partial class EmployesViewModel : BaseViewModel
     private async Task SupprimerAsync()
     {
         if (EmployeSelectionne is null) return;
-
-        // CORRECTION : on passe l'id réel de l'admin connecté
         var r = await _employeService.SupprimerAsync(
             EmployeSelectionne.Id,
             _session.IdCourant);
@@ -201,6 +199,16 @@ public partial class EmployesViewModel : BaseViewModel
                 Erreur = resultat.Erreur ?? "Erreur lors du changement de poste.";
         }
     }
+
+    public async Task AjouterEmployeAsync(Employe employe)
+    {
+        var resultat = await _employeService.CreerAsync(employe);
+        if (resultat.Succes)
+            await ChargerAsync();
+        else
+            Erreur = resultat.Erreur ?? "Erreur";
+    }
+
 
     partial void OnFiltreRechercheChanged(string value)
         => _ = ChargerAsync();

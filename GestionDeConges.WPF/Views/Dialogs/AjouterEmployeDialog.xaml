@@ -1,0 +1,102 @@
+﻿<Window x:Class="GestionDeConges.WPF.Views.Dialogs.AjouterEmployeDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Ajouter un employé"
+        Height="560" Width="500"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource BgPageBrush}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Titre -->
+            <TextBlock Grid.Row="0" Text="➕ Nouvel employé"
+                       FontSize="18" FontWeight="Bold"
+                       Foreground="{StaticResource PrimaryBrush}"
+                       Margin="0 0 0 16"/>
+
+            <!-- Nom -->
+            <TextBox Grid.Row="1" x:Name="TxtNom"
+                     materialDesign:HintAssist.Hint="Nom *"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0 0 0 10"/>
+
+            <!-- Prénom -->
+            <TextBox Grid.Row="2" x:Name="TxtPrenom"
+                     materialDesign:HintAssist.Hint="Prénom *"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0 0 0 10"/>
+
+            <!-- Email -->
+            <TextBox Grid.Row="3" x:Name="TxtEmail"
+                     materialDesign:HintAssist.Hint="Email *"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0 0 0 10"/>
+
+            <!-- Téléphone -->
+            <TextBox Grid.Row="4" x:Name="TxtTelephone"
+                     materialDesign:HintAssist.Hint="Téléphone"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0 0 0 10"/>
+
+            <!-- Poste -->
+            <ComboBox Grid.Row="5" x:Name="CboPoste"
+                      materialDesign:HintAssist.Hint="Poste *"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      DisplayMemberPath="Nom"
+                      Margin="0 0 0 10"/>
+
+            <!-- Date embauche -->
+            <DatePicker Grid.Row="6" x:Name="DpDateEmbauche"
+                        Text="Date d'embauche"
+                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                        SelectedDate="{x:Static system:DateTime.Today}"
+                        Margin="0 0 0 10"
+                        xmlns:system="clr-namespace:System;assembly=mscorlib"/>
+
+            <!-- Sexe -->
+            <ComboBox Grid.Row="7" x:Name="CboSexe"
+                      materialDesign:HintAssist.Hint="Sexe"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Margin="0 0 0 16">
+                <ComboBoxItem Content="Masculin" Tag="M"/>
+                <ComboBoxItem Content="Féminin" Tag="F"/>
+                <ComboBoxItem Content="Autre" Tag="Autre"/>
+            </ComboBox>
+
+            <!-- Message erreur -->
+            <TextBlock Grid.Row="8" x:Name="TxtErreur"
+                       Foreground="Red" FontSize="12"
+                       TextWrapping="Wrap" Visibility="Collapsed"
+                       Margin="0 0 0 12"/>
+
+            <!-- Boutons -->
+            <StackPanel Grid.Row="9" Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Content="Annuler"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Width="90" Margin="0 0 8 0"
+                        Click="BtnAnnuler_Click"/>
+                <Button Content="Ajouter"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Width="100"
+                        Click="BtnAjouter_Click"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>

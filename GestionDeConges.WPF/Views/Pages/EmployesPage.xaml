@@ -38,6 +38,10 @@
                             Style="{StaticResource PrimaryButtonStyle}"
                             Height="40" Padding="12 0"
                             Command="{Binding ChargerCommand}"/>
+                    <Button Content="➕  Nouvel employé"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Height="40" Padding="12 0" Margin="0 0 8 0"
+                            Click="BtnAjouterEmploye_Click"/>
                 </StackPanel>
             </Grid>
         </StackPanel>
