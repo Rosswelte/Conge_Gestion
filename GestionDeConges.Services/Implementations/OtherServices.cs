@@ -2,6 +2,8 @@ using ClosedXML.Excel;
 using GestionDeConges.Core.Entities;
 using GestionDeConges.Core.Interfaces;
 using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace GestionDeConges.Services.Implementations;
 
@@ -302,7 +304,7 @@ public class RapportService(IUnitOfWork uow) : IRapportService
         {
             container.Page(page =>
             {
-                page.Size(QuestPDF.Infrastructure.PageSizes.A4);
+                page.Size(PageSizes.A4);
                 page.Margin(1.5f, QuestPDF.Infrastructure.Unit.Centimetre);
 
                 page.Header()
@@ -323,13 +325,20 @@ public class RapportService(IUnitOfWork uow) : IRapportService
                     });
 
                     // En-têtes
-                    foreach (var h in new[] { "Employé", "Type", "Début", "Fin", "Jours", "Statut" })
+                    table.Header(header =>
                     {
-                        table.Header().Cell()
-                            .Background(QuestPDF.Infrastructure.Color.FromHex("#1D9E75"))
-                            .Padding(5)
-                            .Text(h).FontColor(QuestPDF.Infrastructure.Colors.White).Bold();
-                    }
+                        foreach (var h in new[] { "Employé", "Type", "Début", "Fin", "Jours", "Statut" })
+                        {
+                            header.Cell()
+                                .Background(Colors.Green.Darken2)  // Équivalent du #1D9E75
+                                .Padding(5)
+                                .Text(h)
+                                .FontColor(Colors.White)
+                                .Bold();
+                        }
+                    });
+
+                   
 
                     foreach (var d in demandes)
                     {
