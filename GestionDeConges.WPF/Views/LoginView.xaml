@@ -1,88 +1,21 @@
-<Window x:Class="GestionDeConges.WPF.Views.LoginView"
+﻿<Window x:Class="GestionDeConges.WPF.Views.LoginView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:vm="clr-namespace:GestionDeConges.WPF.ViewModels"
-        Title="Connexion — Gestion des Congés"
-        Height="520" Width="420"
+        Title="Connexion - Gestion de Congés" Height="450" Width="400"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
-        Background="{StaticResource BgPageBrush}"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        FontFamily="{DynamicResource MaterialDesignFont}">
+        ResizeMode="NoResize">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!-- Carte centrale -->
-        <Border Style="{StaticResource CardStyle}"
-                Margin="30" VerticalAlignment="Center"
-                HorizontalAlignment="Stretch">
+        <materialDesign:Card Margin="20" Padding="20">
             <StackPanel>
+                <TextBlock Text="Connexion" FontSize="24" HorizontalAlignment="Center" Margin="0,0,0,30"/>
 
-                <!-- Logo / Titre -->
-                <TextBlock Text="🏢" FontSize="40"
-                           HorizontalAlignment="Center" Margin="0 0 0 6"/>
-                <TextBlock Text="Gestion des Congés"
-                           FontSize="20" FontWeight="Bold"
-                           HorizontalAlignment="Center"
-                           Foreground="{StaticResource PrimaryBrush}"
-                           Margin="0 0 0 4"/>
-                <TextBlock Text="Connectez-vous pour continuer"
-                           FontSize="12"
-                           HorizontalAlignment="Center"
-                           Foreground="{StaticResource TextMutedBrush}"
-                           Margin="0 0 0 24"/>
+                <TextBox x:Name="txtUsername" materialDesign:HintAssist.Hint="Nom d'utilisateur" Margin="0,10"/>
+                <PasswordBox x:Name="txtPassword" materialDesign:HintAssist.Hint="Mot de passe" Margin="0,10"/>
 
-                <!-- Nom d'utilisateur -->
-                <TextBox x:Name="TxtUsername"
-                         materialDesign:HintAssist.Hint="Nom d'utilisateur"
-                         materialDesign:HintAssist.IsFloating="True"
-                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                         Margin="0 0 0 16"
-                         Text="{Binding NomUtilisateur, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <!-- Mot de passe (PasswordBox = pas de binding direct) -->
-                <PasswordBox x:Name="TxtPassword"
-                             materialDesign:HintAssist.Hint="Mot de passe"
-                             materialDesign:HintAssist.IsFloating="True"
-                             Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
-                             Margin="0 0 0 8"/>
-
-                <!-- Message d'erreur -->
-                <TextBlock Text="{Binding ErreurMessage}"
-                           Foreground="Red" FontSize="12"
-                           TextWrapping="Wrap"
-                           Visibility="{Binding ErreurMessage,
-                               Converter={StaticResource StringToVisibilityConverter}}"
-                           Margin="0 0 0 8"/>
-
-                <!-- Bouton connexion admin -->
-                <Button Content="🔐  Se connecter (Admin)"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        Height="42" Margin="0 8 0 0"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
-                        Click="BtnAdmin_Click"/>
-
-                <!-- Séparateur -->
-                <Separator Margin="0 16"/>
-
-                <!-- Bouton mode employé -->
-                <Button Content="👤  Accès Employé (sans mot de passe)"
-                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Height="42" Margin="0 0 0 8"
-                        Foreground="{StaticResource PrimaryBrush}"
-                        BorderBrush="{StaticResource PrimaryBrush}"
-                        Click="BtnEmploye_Click"/>
-
-                <!-- Spinner chargement -->
-                <ProgressBar IsIndeterminate="True" Height="3"
-                             Margin="0 8 0 0"
-                             Visibility="{Binding IsBusy,
-                                 Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Button Content="Se connecter" Click="BtnLogin_Click" Margin="0,20,0,0" Height="40"/>
             </StackPanel>
-        </Border>
+        </materialDesign:Card>
     </Grid>
 </Window>

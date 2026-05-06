@@ -1,59 +1,47 @@
-﻿using GestionDeConges.Core.Enums;
-using GestionDeConges.Core.Interfaces;
-using GestionDeConges.WPF.ViewModels;
-using GestionDeConges.WPF.Views.Dialogs;
-using Microsoft.Extensions.DependencyInjection;
+﻿using GestionDeConges.Core.Interfaces;
+using GestionDeConges.WPF.Views;
 using System.Windows;
 
 namespace GestionDeConges.WPF.Views;
 
 public partial class LoginView : Window
 {
-    private readonly LoginViewModel _vm;
-    private readonly SessionService _session;
+    private readonly IAuthService _authService;
 
-    public LoginView(LoginViewModel vm, SessionService session)
+    public LoginView(IAuthService authService)
     {
         InitializeComponent();
-        _vm = vm;
-        _session = session;
-        DataContext = _vm;
+        _authService = authService;
     }
 
-    // ── Connexion Admin ───────────────────────────────────────────────────────
-    private async void BtnAdmin_Click(object sender, RoutedEventArgs e)
+    private async void BtnLogin_Click(object sender, RoutedEventArgs e)
     {
-        // Passe le mot de passe manuellement (PasswordBox non bindable)
-        await _vm.ConnecterCommand.ExecuteAsync(TxtPassword.Password);
+        string username = txtUsername.Text.Trim();
+        string password = txtPassword.Password;
 
-        // Si connexion réussie → fermer LoginView
-        if (_session.EstConnecte)
-            this.Close();
-    }
-
-    // ── Mode Employé (sans mot de passe) ─────────────────────────────────────
-    private void BtnEmploye_Click(object sender, RoutedEventArgs e)
-    {
-        // Ouvre un dialog de sélection d'employé
-        var dialog = App.Services.GetRequiredService<ChoixEmployeDialog>();
-        bool? result = dialog.ShowDialog();
-
-        if (result == true && dialog.EmployeSelectionne is not null)
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            // Créer un utilisateur fictif "employé" pour la session
-            var fakeUtil = new Core.Entities.Utilisateur
-            {
-                Id = -1,
-                NomUtilisateur = dialog.EmployeSelectionne.NomComplet,
-                Role = RoleUtilisateur.Employe,
-                IdEmploye = dialog.EmployeSelectionne.Id,
-                Employe = dialog.EmployeSelectionne
-            };
-            _session.OuvrirSession(fakeUtil);
+            MessageBox.Show("Veuillez remplir tous les champs", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
 
-            var employeWindow = App.Services.GetRequiredService<EmployeSpaceView>();
-            employeWindow.Show();
-            this.Close();
+        var result = await _authService.ConnecterAsync(username, password);
+
+        if (result.Succes)
+        {
+            MessageBox.Show($"Connexion réussie !\nBienvenue {result.Donnee?.NomUtilisateur}",
+                          "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // Ouvrir la fenêtre principale
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
+
+            this.Close(); // Fermer la fenêtre de login
+        }
+        else
+        {
+            MessageBox.Show(result.Erreur ?? "Identifiants incorrects",
+                          "Échec de connexion", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

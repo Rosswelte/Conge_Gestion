@@ -1,34 +1,24 @@
-﻿using GestionDeConges.WPF.ViewModels;
-using GestionDeConges.WPF.Views;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
-namespace GestionDeConges.WPF;
-
-public partial class MainWindow : Window
+namespace GestionDeConges.WPF
 {
-    private readonly MainViewModel _vm;
-
-    public MainWindow(MainViewModel vm)
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
-        _vm = vm;
-        DataContext = _vm;
-
-        // Charger la page dashboard par défaut au démarrage
-        Loaded += async (_, _) =>
+        public MainWindow()
         {
-            _vm.NaviguerDashboardCommand.Execute(null);
-            // Charger les données du dashboard
-            if (_vm.PageActive is DashboardViewModel dash)
-                await dash.ChargerAsync();
-        };
-    }
-
-    // Déconnexion : ferme cette fenêtre après que le ViewModel a ouvert LoginView
-    private void BtnDeconnexion_Click(object sender, RoutedEventArgs e)
-    {
-        // Le ViewModel ouvre déjà LoginView, on ferme juste MainWindow
-        this.Close();
+            InitializeComponent();
+        }
     }
 }
