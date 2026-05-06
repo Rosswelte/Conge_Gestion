@@ -1,25 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using GestionDeConges.WPF.ViewModels;
+using GestionDeConges.WPF.Views;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace GestionDeConges.WPF.Views
+namespace GestionDeConges.WPF.Views;
+
+public partial class EmployeSpaceView : Window
 {
-    /// <summary>
-    /// Logique d'interaction pour EmployeSpaceView.xaml
-    /// </summary>
-    public partial class EmployeSpaceView : Window
+    private readonly EmployeSpaceViewModel _vm;
+
+    public EmployeSpaceView(EmployeSpaceViewModel vm)
     {
-        public EmployeSpaceView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        _vm = vm;
+        DataContext = _vm;
+        Loaded += async (_, _) => await _vm.ChargerAsync();
+    }
+
+    private void BtnDeconnexion_Click(object sender, RoutedEventArgs e)
+    {
+        App.Services.GetRequiredService<SessionService>().FermerSession();
+        var login = App.Services.GetRequiredService<LoginView>();
+        login.Show();
+        this.Close();
     }
 }
