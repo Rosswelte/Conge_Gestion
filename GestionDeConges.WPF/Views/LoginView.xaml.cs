@@ -44,6 +44,14 @@ public partial class LoginView : Window
         _authService = App.Services.GetService<IAuthService>()!;
     }
 
+    // Constructeur par défaut (obligatoire pour XAML)
+    public LoginView()
+    {
+        InitializeComponent();
+        // Pour éviter les erreurs si DI ne marche pas
+        _authService = App.Services.GetService<IAuthService>()!;
+    }
+
     private async void BtnLogin_Click(object sender, RoutedEventArgs e)
     {
         string username = txtUsername.Text?.Trim() ?? "";
