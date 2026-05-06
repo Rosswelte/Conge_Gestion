@@ -156,6 +156,28 @@ CREATE TABLE `notifications` (
     REFERENCES `employes`(`Id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+
+-- ── Historique des postes ────────────────────────────────────────────────────
+CREATE TABLE `historique_postes` (
+  `Id`          INT      NOT NULL AUTO_INCREMENT,
+  `IdEmploye`   INT      NOT NULL,
+  `IdPoste`     INT      NOT NULL,
+  `DateDebut`   DATE     NOT NULL,
+  `DateFin`     DATE     NULL,
+  `EstActuel`   TINYINT(1) NOT NULL DEFAULT 1,
+  `CreeLe`      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`),
+  CONSTRAINT `fk_histposte_emp` FOREIGN KEY (`IdEmploye`)
+    REFERENCES `employes`(`Id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_histposte_poste` FOREIGN KEY (`IdPoste`)
+    REFERENCES `postes`(`Id`) ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+-- Initialiser l'historique avec les postes actuels des employés
+INSERT INTO `historique_postes` (`IdEmploye`, `IdPoste`, `DateDebut`, `EstActuel`)
+SELECT `Id`, `IdPoste`, `DateEmbauche`, 1
+FROM `employes`
+WHERE `EstSupprime` = 0;
 -- =============================================================
 --  DONNÉES DE TEST
 -- =============================================================

@@ -85,6 +85,8 @@ public interface IHistoriquePosteRepository : IRepository<HistoriquePoste>
 {
     Task<HistoriquePoste?> GetActuelAsync(int idEmploye);
     Task<IEnumerable<HistoriquePoste>> GetParEmployeAsync(int idEmploye);
+    Task<IEnumerable<HistoriquePoste>> GetTousAsync();
+
 }
 
 // ── Unit of Work ──────────────────────────────────────────────────────────────

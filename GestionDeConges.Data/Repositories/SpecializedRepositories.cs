@@ -303,4 +303,10 @@ public class HistoriquePosteRepository(AppDbContext ctx)
             .Where(h => h.IdEmploye == idEmploye)
             .OrderByDescending(h => h.DateDebut)
             .ToListAsync();
+    public async Task<IEnumerable<HistoriquePoste>> GetTousAsync()
+    => await _ctx.HistoriquePostes
+        .Include(h => h.Employe)
+        .Include(h => h.Poste)
+        .OrderByDescending(h => h.DateDebut)
+        .ToListAsync();
 }

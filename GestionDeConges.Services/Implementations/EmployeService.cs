@@ -24,6 +24,9 @@ public class EmployeService(IUnitOfWork uow) : IEmployeService
     public Task<IEnumerable<Employe>> RechercherAsync(string terme)
         => _uow.Employes.RechercherAsync(terme);
 
+    public async Task<IEnumerable<HistoriquePoste>> GetTousHistoriquePostesAsync()
+    => await _uow.HistoriquePostes.GetTousAsync();
+
     public async Task<ResultatOperation<Employe>> CreerAsync(Employe employe)
     {
         if (string.IsNullOrWhiteSpace(employe.Nom) || string.IsNullOrWhiteSpace(employe.Prenom))

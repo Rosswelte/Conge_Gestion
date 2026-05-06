@@ -278,6 +278,7 @@ public partial class HistoriqueViewModel : BaseViewModel
     [ObservableProperty] private ObservableCollection<Employe> _employesSupprimes = [];
     [ObservableProperty] private ObservableCollection<Poste> _postesSupprimes = [];
     [ObservableProperty] private ObservableCollection<DemandeConge> _demandesSupprimes = [];
+    [ObservableProperty] private ObservableCollection<HistoriquePoste> _historiquePostes = [];
 
     [RelayCommand]
     public async Task ChargerAsync()
@@ -286,9 +287,11 @@ public partial class HistoriqueViewModel : BaseViewModel
         {
             var emp = await _employeService.GetSupprimesAsync();
             var pos = await _posteService.GetSupprimesAsync();
+            var histo = await _employeService.GetTousHistoriquePostesAsync(); 
 
             EmployesSupprimes = new ObservableCollection<Employe>(emp);
             PostesSupprimes = new ObservableCollection<Poste>(pos);
+            HistoriquePostes = new ObservableCollection<HistoriquePoste>(histo);
         });
     }
 

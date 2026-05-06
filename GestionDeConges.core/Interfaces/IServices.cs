@@ -38,6 +38,7 @@ public interface IEmployeService
     Task<ResultatOperation> SupprimerAsync(int id, int suppresseurId); 
     Task<ResultatOperation> RestaurerAsync(int id);
     Task<ResultatOperation> ChangerPosteAsync(int idEmploye, int idNouveauPoste, DateOnly dateDebut);
+    Task<IEnumerable<HistoriquePoste>> GetTousHistoriquePostesAsync();
     Task<IEnumerable<HistoriquePoste>> GetHistoriquePostesAsync(int idEmploye);
 }
 
