@@ -13,6 +13,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Utilisateur>     Utilisateurs     { get; set; }
     public DbSet<TypeConge>       TypesConges      { get; set; }
     public DbSet<SoldeConge>      SoldesConges     { get; set; }
+    public DbSet<HistoriquePoste> HistoriquePostes { get; set; }
     public DbSet<DemandeConge>    DemandesConges   { get; set; }
     public DbSet<HistoriqueAction> Historiques     { get; set; }
     public DbSet<Notification>    Notifications    { get; set; }
@@ -132,6 +133,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             e.HasQueryFilter(x => !x.EstSupprime);
             e.Ignore(x => x.EstModifiable);
             e.Ignore(x => x.EstEnAttente);
+        });
+
+        // ── HistoriquePoste ──────────────────────────────────────────────────
+        mb.Entity<HistoriquePoste>(e =>
+        {
+            e.ToTable("historique_postes");
+            e.HasKey(x => x.Id);
+            e.HasOne(x => x.Employe)
+             .WithMany()
+             .HasForeignKey(x => x.IdEmploye)
+             .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(x => x.Poste)
+             .WithMany()
+             .HasForeignKey(x => x.IdPoste)
+             .OnDelete(DeleteBehavior.Restrict);
         });
 
         // ── HistoriqueAction ─────────────────────────────────────────────────

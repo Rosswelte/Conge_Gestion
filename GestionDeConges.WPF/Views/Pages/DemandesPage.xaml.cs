@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using GestionDeConges.WPF.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace GestionDeConges.WPF.Views.Pages
@@ -8,12 +9,21 @@ namespace GestionDeConges.WPF.Views.Pages
         public DemandesPage()
         {
             InitializeComponent();
+            Loaded += DemandesPage_Loaded;
+        }
+
+        private async void DemandesPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is DemandesViewModel vm)
+            {
+                await vm.ChargerCommand.ExecuteAsync(null);
+            }
         }
 
         // Ouvre une boîte de dialogue pour saisir le motif de refus
         private void BtnRefuser_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not GestionDeConges.WPF.ViewModels.DemandesViewModel vm)
+            if (DataContext is not DemandesViewModel vm)
                 return;
             if (vm.DemandeSelectionnee is null)
                 return;

@@ -110,6 +110,20 @@
                         <DataGridTextColumn Header="Ancienneté"
                             Binding="{Binding Anciennete, StringFormat='{}{0} an(s)'}"
                             Width="90"/>
+                        <DataGridTemplateColumn Header="Poste" Width="130">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="🔄 Changer"
+                    FontSize="11" Padding="6 2"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Foreground="#2196F3" BorderBrush="#2196F3"
+                    Command="{Binding DataContext.ChangerPosteCommand,
+                        RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                    CommandParameter="{Binding}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
                         <DataGridTemplateColumn Header="Action" Width="110">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

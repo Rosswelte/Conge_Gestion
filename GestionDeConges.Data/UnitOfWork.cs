@@ -1,7 +1,9 @@
+using GestionDeConges.Core.Entities;
 using GestionDeConges.Core.Interfaces;
 using GestionDeConges.Data.Context;
 using GestionDeConges.Data.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
+  
 
 namespace GestionDeConges.Data;
 
@@ -18,6 +20,7 @@ public class UnitOfWork(AppDbContext ctx) : IUnitOfWork
     private IUtilisateurRepository?  _utilisateurs;
     private ITypeCongeRepository?    _typesConges;
     private INotificationRepository? _notifications;
+    private IHistoriquePosteRepository? _historiquePostes;
 
     public IEmployeRepository      Employes      => _employes      ??= new EmployeRepository(_ctx);
     public IDemandeCongeRepository Demandes      => _demandes      ??= new DemandeCongeRepository(_ctx);
@@ -41,6 +44,9 @@ public class UnitOfWork(AppDbContext ctx) : IUnitOfWork
     {
         if (_transaction is not null) await _transaction.RollbackAsync();
     }
+
+    public IHistoriquePosteRepository HistoriquePostes
+    => _historiquePostes ??= new HistoriquePosteRepository(_ctx);
 
     public void Dispose()
     {

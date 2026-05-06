@@ -134,6 +134,22 @@ public class DemandeConge : BaseEntity
     public bool EstEnAttente   => Statut == StatutDemande.EnAttente;
 }
 
+// ── Historique des postes ────────────────────────────────────────────────────
+public class HistoriquePoste
+{
+    public int Id { get; set; }
+    public int IdEmploye { get; set; }
+    public int IdPoste { get; set; }
+    public DateOnly DateDebut { get; set; }
+    public DateOnly? DateFin { get; set; }
+    public bool EstActuel { get; set; } = true;
+    public DateTime CreeLe { get; set; } = DateTime.UtcNow;
+
+    // Navigation
+    public Employe Employe { get; set; } = null!;
+    public Poste Poste { get; set; } = null!;
+}
+
 // ── Historique / Audit ────────────────────────────────────────────────────────
 public class HistoriqueAction
 {

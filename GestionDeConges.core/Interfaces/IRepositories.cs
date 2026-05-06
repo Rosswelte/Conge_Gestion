@@ -78,6 +78,13 @@ public interface INotificationRepository : IRepository<Notification>
     Task<int> CountNonLuesAsync(int idEmploye);
     Task MarquerLuAsync(int id);
     Task MarquerToutesLuesAsync(int idEmploye);
+
+}
+
+public interface IHistoriquePosteRepository : IRepository<HistoriquePoste>
+{
+    Task<HistoriquePoste?> GetActuelAsync(int idEmploye);
+    Task<IEnumerable<HistoriquePoste>> GetParEmployeAsync(int idEmploye);
 }
 
 // ── Unit of Work ──────────────────────────────────────────────────────────────
@@ -90,6 +97,7 @@ public interface IUnitOfWork : IDisposable
     IUtilisateurRepository   Utilisateurs   { get; }
     ITypeCongeRepository     TypesConges    { get; }
     INotificationRepository  Notifications  { get; }
+    IHistoriquePosteRepository HistoriquePostes { get; }
 
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();

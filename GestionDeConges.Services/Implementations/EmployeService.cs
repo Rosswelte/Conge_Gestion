@@ -98,4 +98,50 @@ public class EmployeService(IUnitOfWork uow) : IEmployeService
         await _uow.SaveChangesAsync();
         return ResultatOperation.Ok();
     }
+
+    /// <summary>
+    /// Change le poste d'un employé et enregistre l'historique.
+    /// </summary>
+    public async Task<ResultatOperation> ChangerPosteAsync(int idEmploye, int idNouveauPoste, DateOnly dateDebut)
+    {
+        var employe = await _uow.Employes.GetByIdAsync(idEmploye);
+        if (employe is null)
+            return ResultatOperation.Echec("Employé introuvable.");
+
+        var nouveauPoste = await _uow.Postes.GetByIdAsync(idNouveauPoste);
+        if (nouveauPoste is null)
+            return ResultatOperation.Echec("Poste introuvable.");
+
+        // Clôturer le poste actuel
+        var historiqueActuel = await _uow.HistoriquePostes.GetActuelAsync(idEmploye);
+        if (historiqueActuel is not null)
+        {
+            historiqueActuel.DateFin = dateDebut.AddDays(-1);
+            historiqueActuel.EstActuel = false;
+            await _uow.HistoriquePostes.UpdateAsync(historiqueActuel);
+        }
+
+        // Créer le nouvel historique
+        var nouveau = new HistoriquePoste
+        {
+            IdEmploye = idEmploye,
+            IdPoste = idNouveauPoste,
+            DateDebut = dateDebut,
+            EstActuel = true
+        };
+        await _uow.HistoriquePostes.AddAsync(nouveau);
+
+        // Mettre à jour le poste de l'employé
+        employe.IdPoste = idNouveauPoste;
+        await _uow.Employes.UpdateAsync(employe);
+
+        await _uow.SaveChangesAsync();
+        return ResultatOperation.Ok();
+    }
+
+    /// <summary>
+    /// Récupère l'historique des postes d'un employé.
+    /// </summary>
+    public async Task<IEnumerable<HistoriquePoste>> GetHistoriquePostesAsync(int idEmploye)
+        => await _uow.HistoriquePostes.GetParEmployeAsync(idEmploye);
 }

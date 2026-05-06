@@ -286,4 +286,21 @@ public class NotificationRepository(AppDbContext ctx)
             .Where(n => n.IdEmploye == idEmploye && !n.EstLu).ToListAsync();
         foreach (var n in notifs) { n.EstLu = true; n.LuLe = DateTime.UtcNow; }
     }
+   
+}
+// ── HistoriquePoste ──────────────────────────────────────────────────────────
+public class HistoriquePosteRepository(AppDbContext ctx)
+    : Repository<HistoriquePoste>(ctx), IHistoriquePosteRepository
+{
+    public async Task<HistoriquePoste?> GetActuelAsync(int idEmploye)
+        => await _ctx.HistoriquePostes
+            .Include(h => h.Poste)
+            .FirstOrDefaultAsync(h => h.IdEmploye == idEmploye && h.EstActuel);
+
+    public async Task<IEnumerable<HistoriquePoste>> GetParEmployeAsync(int idEmploye)
+        => await _ctx.HistoriquePostes
+            .Include(h => h.Poste)
+            .Where(h => h.IdEmploye == idEmploye)
+            .OrderByDescending(h => h.DateDebut)
+            .ToListAsync();
 }

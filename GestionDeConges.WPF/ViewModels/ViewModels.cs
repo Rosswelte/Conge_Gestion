@@ -2,9 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using GestionDeConges.Core.Entities;
 using GestionDeConges.Core.Enums;
-using Microsoft.Extensions.DependencyInjection;
 using GestionDeConges.Core.Interfaces;
+using GestionDeConges.WPF.Views.Dialogs;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace GestionDeConges.WPF.ViewModels;
 
@@ -118,11 +120,14 @@ public partial class DemandesViewModel : BaseViewModel
 public partial class EmployesViewModel : BaseViewModel
 {
     private readonly IEmployeService _employeService;
+    private readonly IPosteService _posteService;
     private readonly SessionService _session;
 
-    public EmployesViewModel(IEmployeService employeService, SessionService session)
+
+    public EmployesViewModel(IEmployeService employeService, IPosteService posteService, SessionService session)
     {
         _employeService = employeService;
+        _posteService = posteService;
         _session = session;
     }
 
@@ -174,6 +179,27 @@ public partial class EmployesViewModel : BaseViewModel
         var r = await _employeService.RestaurerAsync(EmployeSelectionne.Id);
         if (r.Succes) await ChargerAsync();
         else Erreur = r.Erreur ?? "Erreur";
+    }
+
+    [RelayCommand]
+    private async Task ChangerPosteAsync(Employe? employe)
+    {
+        if (employe is null) return;
+        var dialog = new ChangerPosteDialog(_posteService, employe)
+        {
+            Owner = Application.Current.MainWindow
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            var resultat = await _employeService.ChangerPosteAsync(
+                employe.Id, dialog.IdPosteSelectionne, dialog.DateDebutSelectionnee);
+
+            if (resultat.Succes)
+                await ChargerAsync();
+            else
+                Erreur = resultat.Erreur ?? "Erreur lors du changement de poste.";
+        }
     }
 
     partial void OnFiltreRechercheChanged(string value)

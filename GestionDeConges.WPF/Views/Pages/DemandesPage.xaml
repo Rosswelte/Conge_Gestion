@@ -5,11 +5,18 @@
              xmlns:conv="clr-namespace:GestionDeConges.WPF.Converters"
              Background="{StaticResource BgPageBrush}">
 
-   
-    <DockPanel Margin="24">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" MaxHeight="400"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
         <!-- En-tête -->
-        <StackPanel DockPanel.Dock="Top" Margin="0 0 0 16">
+        <StackPanel Grid.Row="0" Margin="0 0 0 16">
             <TextBlock Text="📋 Demandes de congé"
                        FontSize="22" FontWeight="Bold"
                        Foreground="{StaticResource PrimaryBrush}"/>
@@ -21,79 +28,27 @@
         </StackPanel>
 
         <!-- Spinner -->
-        <ProgressBar DockPanel.Dock="Top"
+        <ProgressBar Grid.Row="1"
                      IsIndeterminate="True" Height="4" Margin="0 0 0 8"
                      Visibility="{Binding IsBusy,
                          Converter={StaticResource BoolToVisibilityConverter}}"/>
 
         <!-- Messages -->
-        <Border DockPanel.Dock="Top"
+        <Border Grid.Row="2"
                 Background="#EAF3DE" CornerRadius="6" Padding="12 8" Margin="0 0 0 8"
                 Visibility="{Binding Succes,
                     Converter={StaticResource StringToVisibilityConverter}}">
             <TextBlock Text="{Binding Succes}" Foreground="#27500A"/>
         </Border>
-        <Border DockPanel.Dock="Top"
+        <Border Grid.Row="3"
                 Background="#FCEBEB" CornerRadius="6" Padding="12 8" Margin="0 0 0 12"
                 Visibility="{Binding Erreur,
                     Converter={StaticResource StringToVisibilityConverter}}">
             <TextBlock Text="{Binding Erreur}" Foreground="#501313"/>
         </Border>
 
-        <!-- Panel actions (visible quand une demande est sélectionnée) -->
-        <Border DockPanel.Dock="Bottom"
-                Background="White" CornerRadius="10" Padding="16" Margin="0 12 0 0"
-                BorderBrush="{StaticResource MaterialDesignDivider}" BorderThickness="1">
-            <Border.Style>
-                <Style TargetType="Border">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding DemandeSelectionnee}" Value="{x:Null}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="Demande sélectionnée"
-                               FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
-                    <TextBlock FontSize="14" FontWeight="Bold" Margin="0 4 0 0">
-                        <Run Text="{Binding DemandeSelectionnee.Employe.NomComplet, FallbackValue=''}"/>
-                        <Run Text=" — "/>
-                        <Run Text="{Binding DemandeSelectionnee.TypeConge.Libelle, FallbackValue=''}"/>
-                        <Run Text=" ("/>
-                        <Run Text="{Binding DemandeSelectionnee.NbJours, FallbackValue=''}"/>
-                        <Run Text=" j)"/>
-                    </TextBlock>
-                </StackPanel>
-
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Button Content="✅  Approuver"
-                            Style="{StaticResource PrimaryButtonStyle}"
-                            Height="36" Margin="0 0 8 0"
-                            Command="{Binding ApprouverCommand}"/>
-                    <Button Content="❌  Refuser"
-                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                            Height="36" Foreground="Red" BorderBrush="Red"
-                            Margin="0 0 8 0"
-                            Click="BtnRefuser_Click"/>
-                    <Button Content="🗑  Supprimer"
-                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                            Height="36" Foreground="Gray" BorderBrush="Gray"
-                            Command="{Binding SupprimerCommand}"/>
-                </StackPanel>
-            </Grid>
-        </Border>
-
         <!-- Liste des demandes -->
-        <Border Style="{StaticResource CardStyle}">
+        <Border Grid.Row="4" Style="{StaticResource CardStyle}">
             <DataGrid ItemsSource="{Binding Demandes}"
                       SelectedItem="{Binding DemandeSelectionnee}"
                       AutoGenerateColumns="False"
@@ -106,23 +61,23 @@
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Employé"
-                        Binding="{Binding Employe.NomComplet}" Width="150"/>
+                        Binding="{Binding Employe.NomComplet, Mode=OneWay}" Width="150"/>
                     <DataGridTextColumn Header="Département"
-                        Binding="{Binding Employe.Poste.Departement.Nom}" Width="120"/>
+                        Binding="{Binding Employe.Poste.Departement.Nom, Mode=OneWay}" Width="120"/>
                     <DataGridTextColumn Header="Type"
-                        Binding="{Binding TypeConge.Libelle}" Width="130"/>
+                        Binding="{Binding TypeConge.Libelle, Mode=OneWay}" Width="130"/>
                     <DataGridTextColumn Header="Début"
-                        Binding="{Binding DateDebut,
+                        Binding="{Binding DateDebut, Mode=OneWay,
                             Converter={StaticResource DateOnlyToStringConverter}}"
                         Width="90"/>
                     <DataGridTextColumn Header="Fin"
-                        Binding="{Binding DateFin,
+                        Binding="{Binding DateFin, Mode=OneWay,
                             Converter={StaticResource DateOnlyToStringConverter}}"
                         Width="90"/>
                     <DataGridTextColumn Header="Jours"
-                        Binding="{Binding NbJours}" Width="60"/>
+                        Binding="{Binding NbJours, Mode=OneWay}" Width="60"/>
                     <DataGridTextColumn Header="Soumis le"
-                        Binding="{Binding CreeLe, StringFormat='{}{0:dd/MM/yyyy}'}"
+                        Binding="{Binding CreeLe, Mode=OneWay, StringFormat='{}{0:dd/MM/yyyy}'}"
                         Width="100"/>
 
                     <DataGridTemplateColumn Header="Statut" Width="110">
@@ -144,13 +99,55 @@
                     </DataGridTemplateColumn>
 
                     <DataGridTextColumn Header="Traité par"
-                        Binding="{Binding Admin.NomUtilisateur, FallbackValue='—'}"
+                        Binding="{Binding Admin.NomUtilisateur, Mode=OneWay, FallbackValue='—'}"
                         Width="100"/>
                     <DataGridTextColumn Header="Commentaire"
-                        Binding="{Binding CommentaireAdmin, FallbackValue='—'}"
+                        Binding="{Binding CommentaireAdmin, Mode=OneWay, FallbackValue='—'}"
                         Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
-    </DockPanel>
+
+        <!-- Panel actions -->
+        <Border Grid.Row="5"
+                Background="White" CornerRadius="10" Padding="16" Margin="0 12 0 0"
+                BorderBrush="{StaticResource MaterialDesignDivider}" BorderThickness="1">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Demande sélectionnée"
+                               FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
+                    <TextBlock FontSize="14" FontWeight="Bold" Margin="0 4 0 0">
+                        <Run Text="{Binding DemandeSelectionnee.Employe.NomComplet, Mode=OneWay, FallbackValue=''}"/>
+                        <Run Text=" — "/>
+                        <Run Text="{Binding DemandeSelectionnee.TypeConge.Libelle, Mode=OneWay, FallbackValue=''}"/>
+                        <Run Text=" ("/>
+                        <Run Text="{Binding DemandeSelectionnee.NbJours, Mode=OneWay, FallbackValue=''}"/>
+                        <Run Text=" j)"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="✅  Approuver"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Height="36" Margin="0 0 8 0"
+                            Command="{Binding ApprouverCommand}"/>
+                    <Button Content="❌  Refuser"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Height="36" Foreground="Red" BorderBrush="Red"
+                            Margin="0 0 8 0"
+                            Click="BtnRefuser_Click"/>
+                    <Button Content="🗑  Supprimer"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Height="36" Foreground="Gray" BorderBrush="Gray"
+                            Command="{Binding SupprimerCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>
