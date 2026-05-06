@@ -1,5 +1,7 @@
 <Solution>
-  <Folder Name="/Database/" />
+  <Folder Name="/Database/">
+    <File Path="script.sql" />
+  </Folder>
   <Project Path="GestionDeConges.API/GestionDeConges.API.AppHost/GestionDeConges.API.AppHost.csproj" />
   <Project Path="GestionDeConges.API/GestionDeConges.API.Server/GestionDeConges.API.Server.csproj" />
   <Project Path="GestionDeConges.core/GestionDeConges.Core.csproj" />
