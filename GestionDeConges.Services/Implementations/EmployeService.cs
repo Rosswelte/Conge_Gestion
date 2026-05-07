@@ -52,6 +52,28 @@ public class EmployeService(IUnitOfWork uow) : IEmployeService
         if (await _uow.Employes.EmailExisteAsync(employe.Email, employe.Id))
             return ResultatOperation<Employe>.Echec("Cet email est déjà utilisé par un autre employé.");
 
+        // ✅ Si le poste change, enregistrer dans l'historique
+        if (existant.IdPoste != employe.IdPoste)
+        {
+            // Clôturer l'ancien historique
+            var historiqueActuel = await _uow.HistoriquePostes.GetActuelAsync(employe.Id);
+            if (historiqueActuel is not null)
+            {
+                historiqueActuel.DateFin = DateOnly.FromDateTime(DateTime.Today);
+                historiqueActuel.EstActuel = false;
+                await _uow.HistoriquePostes.UpdateAsync(historiqueActuel);
+            }
+
+            // Créer le nouveau
+            await _uow.HistoriquePostes.AddAsync(new HistoriquePoste
+            {
+                IdEmploye = employe.Id,
+                IdPoste = employe.IdPoste,
+                DateDebut = DateOnly.FromDateTime(DateTime.Today),
+                EstActuel = true
+            });
+        }
+
         existant.Nom = employe.Nom;
         existant.Prenom = employe.Prenom;
         existant.Email = employe.Email;

@@ -180,23 +180,22 @@ public partial class EmployesViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task ChangerPosteAsync(Employe? employe)
+    private async Task ModifierEmployeAsync(Employe? employe)
     {
         if (employe is null) return;
-        var dialog = new ChangerPosteDialog(_posteService, employe)
+
+        var dialog = new ModifierEmployeDialog(employe, _posteService)
         {
             Owner = Application.Current.MainWindow
         };
 
-        if (dialog.ShowDialog() == true)
+        if (dialog.ShowDialog() == true && dialog.EmployeModifie is not null)
         {
-            var resultat = await _employeService.ChangerPosteAsync(
-                employe.Id, dialog.IdPosteSelectionne, dialog.DateDebutSelectionnee);
-
+            var resultat = await _employeService.ModifierAsync(dialog.EmployeModifie);
             if (resultat.Succes)
                 await ChargerAsync();
             else
-                Erreur = resultat.Erreur ?? "Erreur lors du changement de poste.";
+                Erreur = resultat.Erreur ?? "Erreur modification";
         }
     }
 
@@ -260,6 +259,30 @@ public partial class PostesViewModel : BaseViewModel
     {
         if (PosteSelectionne is null) return;
         var r = await _posteService.RestaurerAsync(PosteSelectionne.Id);
+        if (r.Succes) await ChargerAsync();
+        else Erreur = r.Erreur ?? "Erreur";
+    }
+
+    [RelayCommand]
+    private async Task ModifierPosteAsync(Poste? poste)
+    {
+        if (poste is null) return;
+
+        var dialog = new ModifierPosteDialog(poste)
+        {
+            Owner = Application.Current.MainWindow
+        };
+
+        if (dialog.ShowDialog() == true && dialog.PosteModifie is not null)
+        {
+            var r = await _posteService.ModifierAsync(dialog.PosteModifie);
+            if (r.Succes) await ChargerAsync();
+            else Erreur = r.Erreur ?? "Erreur";
+        }
+    }
+    public async Task AjouterPosteAsync(Poste poste)
+    {
+        var r = await _posteService.CreerAsync(poste);
         if (r.Succes) await ChargerAsync();
         else Erreur = r.Erreur ?? "Erreur";
     }

@@ -7,27 +7,48 @@ using System.Windows.Controls;
 
 namespace GestionDeConges.WPF.Views.Dialogs;
 
-public partial class AjouterEmployeDialog : Window
+public partial class ModifierEmployeDialog : Window
 {
     private readonly IPosteService _posteService;
-    public Employe? EmployeCree { get; private set; }
+    private readonly Employe _employe;
 
-    public AjouterEmployeDialog(IPosteService posteService)
+    public Employe? EmployeModifie { get; private set; }
+
+    public ModifierEmployeDialog(Employe employe, IPosteService posteService)
     {
         InitializeComponent();
+        _employe = employe;
         _posteService = posteService;
-        Loaded += async (_, _) => await ChargerPostesAsync();
+        TxtSousTitre.Text = $"Modification de {employe.NomComplet}";
+        Loaded += async (_, _) => await ChargerAsync();
     }
 
-    private async Task ChargerPostesAsync()
+    private async Task ChargerAsync()
     {
         var postes = await _posteService.GetActifsAsync();
         CboPoste.ItemsSource = postes.ToList();
-        if (CboPoste.Items.Count > 0)
-            CboPoste.SelectedIndex = 0;
+
+        TxtNom.Text = _employe.Nom;
+        TxtPrenom.Text = _employe.Prenom;
+        TxtEmail.Text = _employe.Email;
+        TxtTelephone.Text = _employe.Telephone ?? "";
+        DpDateEmbauche.SelectedDate = _employe.DateEmbauche.ToDateTime(TimeOnly.MinValue);
+
+        foreach (ComboBoxItem item in CboSexe.Items)
+        {
+            if (item.Tag?.ToString() == _employe.Sexe.ToString())
+            {
+                CboSexe.SelectedItem = item;
+                break;
+            }
+        }
+
+        CboPoste.SelectedItem = CboPoste.Items
+            .Cast<Poste>()
+            .FirstOrDefault(p => p.Id == _employe.IdPoste);
     }
 
-    private void BtnAjouter_Click(object sender, RoutedEventArgs e)
+    private void BtnModifier_Click(object sender, RoutedEventArgs e)
     {
         CacherErreur();
 
@@ -67,14 +88,14 @@ public partial class AjouterEmployeDialog : Window
             if (telephone.Length > 20)
             { AfficherErreur("Le numéro de téléphone ne doit pas dépasser 20 caractères."); TxtTelephone.Focus(); return; }
         }
-        if (DpDateNaissance.SelectedDate is not null)
-        {
-            var dateNaissance = DateOnly.FromDateTime(DpDateNaissance.SelectedDate.Value);
-            if (dateNaissance > DateOnly.FromDateTime(DateTime.Today))
-            { AfficherErreur("La date de naissance ne peut pas être dans le futur."); return; }
-            if (dateNaissance.Year < 1900)
-            { AfficherErreur("La date de naissance semble incorrecte."); return; }
-        }
+
+        if (DpDateEmbauche.SelectedDate is null)
+        { AfficherErreur("La date d'embauche est obligatoire."); return; }
+        var dateEmbauche = DateOnly.FromDateTime(DpDateEmbauche.SelectedDate.Value);
+        if (dateEmbauche > DateOnly.FromDateTime(DateTime.Today))
+        { AfficherErreur("La date d'embauche ne peut pas être dans le futur."); return; }
+        if (dateEmbauche.Year < 2000)
+        { AfficherErreur("La date d'embauche semble incorrecte (avant 2000)."); return; }
         // Validation âge (≥ 18 ans)
         if (DpDateNaissance.SelectedDate is not null)
         {
@@ -94,41 +115,29 @@ public partial class AjouterEmployeDialog : Window
                 return;
             }
         }
-
-        if (DpDateEmbauche.SelectedDate is null)
-        { AfficherErreur("La date d'embauche est obligatoire."); return; }
-        var dateEmbauche = DateOnly.FromDateTime(DpDateEmbauche.SelectedDate.Value);
-        if (dateEmbauche > DateOnly.FromDateTime(DateTime.Today))
-        { AfficherErreur("La date d'embauche ne peut pas être dans le futur."); return; }
-        if (dateEmbauche.Year < 2000)
-        { AfficherErreur("La date d'embauche semble incorrecte (avant 2000)."); return; }
-
         if (CboPoste.SelectedItem is not Poste poste)
         { AfficherErreur("Veuillez sélectionner un poste."); return; }
 
         if (CboSexe.SelectedItem is null)
         { AfficherErreur("Veuillez sélectionner le sexe."); return; }
 
-        // ── Construction ────────────────────────────────────────────────────
+        // ── Application des modifications ───────────────────────────────────
         var sexe = Sexe.M;
         if (CboSexe.SelectedItem is ComboBoxItem item && item.Tag is string tag)
             sexe = tag switch { "F" => Sexe.F, "Autre" => Sexe.Autre, _ => Sexe.M };
 
-        EmployeCree = new Employe
-        {
-            Nom = nom,
-            Prenom = prenom,
-            Email = email.ToLower(),
-            Telephone = string.IsNullOrWhiteSpace(telephone) ? null : telephone,
-            DateNaissance = DpDateNaissance.SelectedDate is not null
-                ? DateOnly.FromDateTime(DpDateNaissance.SelectedDate.Value)
-                : null,
-            IdPoste = poste.Id,
-            DateEmbauche = dateEmbauche,
-            Sexe = sexe,
-            EstActif = true
-        };
+        _employe.Nom = nom;
+        _employe.Prenom = prenom;
+        _employe.Email = email.ToLower();
+        _employe.Telephone = string.IsNullOrWhiteSpace(telephone) ? null : telephone;
+        _employe.IdPoste = poste.Id;
+        _employe.DateNaissance = DpDateNaissance.SelectedDate is not null
+    ? DateOnly.FromDateTime(DpDateNaissance.SelectedDate.Value)
+    : null;
+        _employe.DateEmbauche = dateEmbauche;
+        _employe.Sexe = sexe;
 
+        EmployeModifie = _employe;
         DialogResult = true;
         Close();
     }

@@ -41,7 +41,7 @@
             <TextBlock Text="{Binding Erreur}" Foreground="#501313"/>
         </Border>
 
-        <!-- Postes actifs ★ CORRIGÉ : sans Style= sur l'élément -->
+        <!-- Postes actifs -->
         <Border CornerRadius="10" Background="White" Padding="16">
             <Border.Style>
                 <Style TargetType="Border">
@@ -55,10 +55,14 @@
             </Border.Style>
 
             <DockPanel>
-                <TextBlock DockPanel.Dock="Top" Text="Postes actifs"
-                           FontSize="15" FontWeight="Bold"
-                           Foreground="{StaticResource PrimaryBrush}"
-                           Margin="0 0 0 12"/>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0 0 0 12">
+                    <TextBlock Text="Postes actifs" FontSize="15" FontWeight="Bold"
+                               Foreground="{StaticResource PrimaryBrush}"
+                               VerticalAlignment="Center" Margin="0 0 12 0"/>
+                    <Button Content="➕ Ajouter" Style="{StaticResource PrimaryButtonStyle}"
+                            Height="32" Padding="10 0" FontSize="12"
+                            Click="BtnAjouterPoste_Click"/>
+                </StackPanel>
 
                 <DataGrid ItemsSource="{Binding Postes}"
                           SelectedItem="{Binding PosteSelectionne}"
@@ -67,21 +71,27 @@
                           BorderThickness="0" GridLinesVisibility="Horizontal"
                           RowHeaderWidth="0" SelectionMode="Single">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Poste"
-                            Binding="{Binding Nom}" Width="*"/>
-                        <DataGridTextColumn Header="Département"
-                            Binding="{Binding Departement.Nom}" Width="160"/>
-                        <DataGridTextColumn Header="Min. employés"
-                            Binding="{Binding NbMinEmployes}" Width="120"/>
-                        <DataGridTemplateColumn Header="Action" Width="110">
+                        <DataGridTextColumn Header="Poste" Binding="{Binding Nom}" Width="*"/>
+                        <DataGridTextColumn Header="Département" Binding="{Binding Departement.Nom}" Width="160"/>
+                        <DataGridTextColumn Header="Min. employés" Binding="{Binding NbMinEmployes}" Width="120"/>
+                        <DataGridTemplateColumn Header="Actions" Width="170">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="🗑 Supprimer"
-                                            FontSize="11" Padding="6 2"
-                                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                                            Foreground="Red" BorderBrush="Red"
-                                            Command="{Binding DataContext.SupprimerCommand,
-                                                RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="✏ Modifier" FontSize="11" Padding="6 2"
+                                                Margin="0 0 6 0"
+                                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                Foreground="{StaticResource PrimaryBrush}"
+                                                BorderBrush="{StaticResource PrimaryBrush}"
+                                                Command="{Binding DataContext.ModifierPosteCommand,
+                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Content="🗑" FontSize="11" Padding="6 2"
+                                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                Foreground="Red" BorderBrush="Red"
+                                                Command="{Binding DataContext.SupprimerCommand,
+                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

@@ -5,11 +5,10 @@
              xmlns:conv="clr-namespace:GestionDeConges.WPF.Converters"
              Background="{StaticResource BgPageBrush}">
 
-   
 
     <DockPanel Margin="24">
 
-        <!-- ── En-tête ────────────────────────────────────────────────── -->
+        <!-- En-tête -->
         <StackPanel DockPanel.Dock="Top" Margin="0 0 0 16">
             <TextBlock Text="👥 Gestion des employés"
                        FontSize="22" FontWeight="Bold"
@@ -28,6 +27,10 @@
                          MaxWidth="400" HorizontalAlignment="Left"/>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="➕ Nouvel employé"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Height="40" Padding="12 0" Margin="0 0 8 0"
+                            Click="BtnAjouterEmploye_Click"/>
                     <ToggleButton Content="🗂  Afficher supprimés"
                                   IsChecked="{Binding AfficherHistorique}"
                                   Style="{StaticResource MaterialDesignOutlinedButton}"
@@ -38,10 +41,6 @@
                             Style="{StaticResource PrimaryButtonStyle}"
                             Height="40" Padding="12 0"
                             Command="{Binding ChargerCommand}"/>
-                    <Button Content="➕  Nouvel employé"
-                            Style="{StaticResource PrimaryButtonStyle}"
-                            Height="40" Padding="12 0" Margin="0 0 8 0"
-                            Click="BtnAjouterEmploye_Click"/>
                 </StackPanel>
             </Grid>
         </StackPanel>
@@ -60,9 +59,7 @@
             <TextBlock Text="{Binding Erreur}" Foreground="#501313"/>
         </Border>
 
-        <!-- ── Liste employés actifs ─────────────────────────────────── -->
-        <!-- CORRECTION : pas de Style + Border.Style sur le même élément.
-             On utilise uniquement DataTrigger pour masquer/afficher. -->
+        <!-- Liste employés actifs -->
         <Border Background="White" CornerRadius="10" Padding="16">
             <Border.Style>
                 <Style TargetType="Border">
@@ -95,57 +92,48 @@
                           RowHeaderWidth="0"
                           SelectionMode="Single">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nom"
-                            Binding="{Binding Nom}" Width="120"/>
-                        <DataGridTextColumn Header="Prénom"
-                            Binding="{Binding Prenom}" Width="120"/>
-                        <DataGridTextColumn Header="Email"
-                            Binding="{Binding Email}" Width="*"/>
-                        <DataGridTextColumn Header="Téléphone"
-                            Binding="{Binding Telephone}" Width="120"/>
-                        <DataGridTextColumn Header="Poste"
-                            Binding="{Binding Poste.Nom}" Width="140"/>
-                        <DataGridTextColumn Header="Département"
-                            Binding="{Binding Poste.Departement.Nom}" Width="130"/>
+                        <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" Width="100"/>
+                        <DataGridTextColumn Header="Prénom" Binding="{Binding Prenom}" Width="100"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                        <DataGridTextColumn Header="Téléphone" Binding="{Binding Telephone}" Width="110"/>
+                        <DataGridTextColumn Header="Poste" Binding="{Binding Poste.Nom}" Width="120"/>
+                        <DataGridTextColumn Header="Département" Binding="{Binding Poste.Departement.Nom}" Width="120"/>
                         <DataGridTextColumn Header="Embauché le"
-                            Binding="{Binding DateEmbauche,
-                                Converter={StaticResource DateOnlyToStringConverter}}"
+                            Binding="{Binding DateEmbauche, Converter={StaticResource DateOnlyToStringConverter}}"
                             Width="100"/>
                         <DataGridTextColumn Header="Ancienneté"
                             Binding="{Binding Anciennete, StringFormat='{}{0} an(s)'}"
-                            Width="90"/>
-                        <DataGridTemplateColumn Header="Poste" Width="130">
+                            Width="80"/>
+
+                        <DataGridTemplateColumn Header="Actions" Width="180">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="🔄 Changer"
-                    FontSize="11" Padding="6 2"
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Foreground="#2196F3" BorderBrush="#2196F3"
-                    Command="{Binding DataContext.ChangerPosteCommand,
-                        RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                    CommandParameter="{Binding}"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="✏ Modifier"
+                                                FontSize="11" Padding="6 2" Margin="0 0 6 0"
+                                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                Foreground="{StaticResource PrimaryBrush}"
+                                                BorderBrush="{StaticResource PrimaryBrush}"
+                                                Command="{Binding DataContext.ModifierEmployeCommand,
+                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Content="🗑 Suppr."
+                                                FontSize="11" Padding="6 2"
+                                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                Foreground="Red" BorderBrush="Red"
+                                                Command="{Binding DataContext.SupprimerCommand,
+                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
-                        <DataGridTemplateColumn Header="Action" Width="110">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="🗑 Supprimer"
-                                            FontSize="11" Padding="6 2"
-                                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                                            Foreground="Red" BorderBrush="Red"
-                                            Command="{Binding DataContext.SupprimerCommand,
-                                                RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+
                     </DataGrid.Columns>
                 </DataGrid>
             </DockPanel>
         </Border>
 
-        <!-- ── Liste employés supprimés ──────────────────────────────── -->
+        <!-- Liste employés supprimés -->
         <Border Background="White" CornerRadius="10" Padding="16">
             <Border.Style>
                 <Style TargetType="Border">
@@ -178,17 +166,12 @@
                           RowHeaderWidth="0"
                           SelectionMode="Single">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nom"
-                            Binding="{Binding Nom}" Width="120"/>
-                        <DataGridTextColumn Header="Prénom"
-                            Binding="{Binding Prenom}" Width="120"/>
-                        <DataGridTextColumn Header="Email"
-                            Binding="{Binding Email}" Width="*"/>
-                        <DataGridTextColumn Header="Poste"
-                            Binding="{Binding Poste.Nom}" Width="140"/>
+                        <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" Width="120"/>
+                        <DataGridTextColumn Header="Prénom" Binding="{Binding Prenom}" Width="120"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                        <DataGridTextColumn Header="Poste" Binding="{Binding Poste.Nom}" Width="140"/>
                         <DataGridTextColumn Header="Supprimé le"
-                            Binding="{Binding SupprimeLe, StringFormat='{}{0:dd/MM/yyyy}'}"
-                            Width="110"/>
+                            Binding="{Binding SupprimeLe, StringFormat='{}{0:dd/MM/yyyy}'}" Width="110"/>
                         <DataGridTemplateColumn Header="Action" Width="110">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

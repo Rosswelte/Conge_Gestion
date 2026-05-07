@@ -1,8 +1,8 @@
-﻿<Window x:Class="GestionDeConges.WPF.Views.Dialogs.AjouterEmployeDialog"
+﻿<Window x:Class="GestionDeConges.WPF.Views.Dialogs.ModifierEmployeDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="Ajouter un employé"
+        Title="Modifier un employé"
         Height="550" Width="500"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
@@ -20,10 +20,10 @@
 
         <!-- Titre -->
         <StackPanel Grid.Row="0" Margin="0 0 0 20">
-            <TextBlock Text="➕ Nouvel employé"
+            <TextBlock Text="✏️ Modifier un employé"
                        FontSize="18" FontWeight="Bold"
                        Foreground="{StaticResource PrimaryBrush}"/>
-            <TextBlock Text="Remplissez les informations du nouvel employé"
+            <TextBlock x:Name="TxtSousTitre"
                        FontSize="12"
                        Foreground="{StaticResource TextMutedBrush}"
                        Margin="0 4 0 0"/>
@@ -62,10 +62,10 @@
 
                 <!-- Sexe -->
                 <ComboBox x:Name="CboSexe"
-                          materialDesign:HintAssist.Hint="Sexe"
+                          materialDesign:HintAssist.Hint="Sexe *"
                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
                           Margin="0 0 0 14">
-                    <ComboBoxItem Content="M — Masculin" Tag="M" IsSelected="True"/>
+                    <ComboBoxItem Content="M — Masculin" Tag="M"/>
                     <ComboBoxItem Content="F — Féminin"  Tag="F"/>
                     <ComboBoxItem Content="Autre"        Tag="Autre"/>
                 </ComboBox>
@@ -74,14 +74,11 @@
                             materialDesign:HintAssist.Hint="Date de naissance"
                             Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                             Margin="0 0 0 14"/>
-                
                 <!-- Date embauche -->
                 <DatePicker x:Name="DpDateEmbauche"
                             materialDesign:HintAssist.Hint="Date d'embauche *"
                             Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                            SelectedDate="{x:Static system:DateTime.Today}"
-                            Margin="0 0 0 14"
-                            xmlns:system="clr-namespace:System;assembly=mscorlib"/>
+                            Margin="0 0 0 14"/>
 
                 <!-- Poste -->
                 <ComboBox x:Name="CboPoste"
@@ -112,9 +109,9 @@
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     Width="100" Margin="0 0 10 0"
                     Click="BtnAnnuler_Click"/>
-            <Button x:Name="BtnAjouter" Content="✔  Ajouter"
+            <Button x:Name="BtnModifier" Content="✔  Modifier"
                     Style="{StaticResource PrimaryButtonStyle}"
-                    Width="130" Click="BtnAjouter_Click"/>
+                    Width="130" Click="BtnModifier_Click"/>
         </StackPanel>
     </Grid>
 </Window>
