@@ -117,7 +117,7 @@
                                                 Command="{Binding DataContext.ModifierEmployeCommand,
                                                     RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                 CommandParameter="{Binding}"/>
-                                        <Button Content="🗑 Suppr."
+                                        <Button Content="🗑"
                                                 FontSize="11" Padding="6 2"
                                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                                 Foreground="Red" BorderBrush="Red"
