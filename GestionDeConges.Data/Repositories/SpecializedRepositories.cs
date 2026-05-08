@@ -88,15 +88,26 @@ public class DemandeCongeRepository(AppDbContext ctx)
     }
 
     public async Task<IEnumerable<DemandeConge>> GetEnAttenteAsync()
-        => await Detailed()
-            .Where(d => d.Statut == StatutDemande.EnAttente)
-            .OrderBy(d => d.CreeLe)
-            .ToListAsync();
+     => await Detailed()
+         .Where(d => d.Statut == StatutDemande.EnAttente && !d.Employe.EstSupprime)
+         .OrderBy(d => d.CreeLe)
+         .ToListAsync();
 
     public async Task<IEnumerable<DemandeConge>> GetToutesAvecDetailsAsync()
         => await Detailed()
+            .Where(d => !d.Employe.EstSupprime)
             .OrderByDescending(d => d.CreeLe)
             .ToListAsync();
+
+    public async Task<Dictionary<StatutDemande, int>> GetStatistiquesStatutsAsync(int? annee = null)
+    {
+        var q = _ctx.DemandesConges.Where(d => !d.Employe.EstSupprime);
+        if (annee.HasValue)
+            q = q.Where(d => d.DateDebut.Year == annee.Value);
+        return await q.GroupBy(d => d.Statut)
+            .Select(g => new { Statut = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.Statut, x => x.Count);
+    }
 
     public async Task<bool> ChevauchementsExisteAsync(int idEmploye, DateOnly debut, DateOnly fin, int? excludeId = null)
         => await _ctx.DemandesConges
@@ -121,15 +132,7 @@ public class DemandeCongeRepository(AppDbContext ctx)
             .Where(d => d.DateDebut >= debut && d.DateFin <= fin)
             .ToListAsync();
 
-    public async Task<Dictionary<StatutDemande, int>> GetStatistiquesStatutsAsync(int? annee = null)
-    {
-        var q = _ctx.DemandesConges.AsQueryable();
-        if (annee.HasValue)
-            q = q.Where(d => d.DateDebut.Year == annee.Value);
-        return await q.GroupBy(d => d.Statut)
-            .Select(g => new { Statut = g.Key, Count = g.Count() })
-            .ToDictionaryAsync(x => x.Statut, x => x.Count);
-    }
+  
 
     public async Task<IEnumerable<DemandeConge>> GetParTypeAsync(int idType, int? annee = null)
     {

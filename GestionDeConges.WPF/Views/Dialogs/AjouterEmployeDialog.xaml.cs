@@ -43,7 +43,8 @@ public partial class AjouterEmployeDialog : Window
         { AfficherErreur("Le nom doit contenir au moins 2 caractères."); TxtNom.Focus(); return; }
         if (nom.Length > 60)
         { AfficherErreur("Le nom ne doit pas dépasser 60 caractères."); TxtNom.Focus(); return; }
-
+        if (nom.Any(char.IsDigit))
+        { AfficherErreur("Le nom du poste ne doit pas contenir de chiffres."); return; }
         if (string.IsNullOrWhiteSpace(prenom))
         { AfficherErreur("Le prénom est obligatoire."); TxtPrenom.Focus(); return; }
         if (prenom.Length < 2)

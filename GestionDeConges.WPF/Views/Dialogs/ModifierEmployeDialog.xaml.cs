@@ -33,7 +33,8 @@ public partial class ModifierEmployeDialog : Window
         TxtEmail.Text = _employe.Email;
         TxtTelephone.Text = _employe.Telephone ?? "";
         DpDateEmbauche.SelectedDate = _employe.DateEmbauche.ToDateTime(TimeOnly.MinValue);
-
+        if (_employe.DateNaissance.HasValue)
+            DpDateNaissance.SelectedDate = _employe.DateNaissance.Value.ToDateTime(TimeOnly.MinValue);
         foreach (ComboBoxItem item in CboSexe.Items)
         {
             if (item.Tag?.ToString() == _employe.Sexe.ToString())
@@ -64,6 +65,8 @@ public partial class ModifierEmployeDialog : Window
         { AfficherErreur("Le nom doit contenir au moins 2 caractères."); TxtNom.Focus(); return; }
         if (nom.Length > 60)
         { AfficherErreur("Le nom ne doit pas dépasser 60 caractères."); TxtNom.Focus(); return; }
+        if (nom.Any(char.IsDigit))
+        { AfficherErreur("Le nom du poste ne doit pas contenir de chiffres."); return; }
 
         if (string.IsNullOrWhiteSpace(prenom))
         { AfficherErreur("Le prénom est obligatoire."); TxtPrenom.Focus(); return; }
@@ -97,6 +100,14 @@ public partial class ModifierEmployeDialog : Window
         if (dateEmbauche.Year < 2000)
         { AfficherErreur("La date d'embauche semble incorrecte (avant 2000)."); return; }
         // Validation âge (≥ 18 ans)
+        if (DpDateNaissance.SelectedDate is not null)
+        {
+            var dateNaissance = DateOnly.FromDateTime(DpDateNaissance.SelectedDate.Value);
+            if (dateNaissance > DateOnly.FromDateTime(DateTime.Today))
+            { AfficherErreur("La date de naissance ne peut pas être dans le futur."); return; }
+            if (dateNaissance.Year < 1900)
+            { AfficherErreur("La date de naissance semble incorrecte."); return; }
+        }
         if (DpDateNaissance.SelectedDate is not null)
         {
             var dateNaissance = DateOnly.FromDateTime(DpDateNaissance.SelectedDate.Value);

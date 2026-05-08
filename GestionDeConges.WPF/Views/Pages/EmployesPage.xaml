@@ -121,8 +121,9 @@
                                                 FontSize="11" Padding="6 2"
                                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                                 Foreground="Red" BorderBrush="Red"
-                                                Command="{Binding DataContext.SupprimerCommand,
-                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                                Click="BtnSupprimerEmploye_Click"
+                                                CommandParameter="{Binding}"/>
+
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

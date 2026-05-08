@@ -1,9 +1,9 @@
-﻿<Window x:Class="GestionDeConges.WPF.Views.Dialogs.ModifierPosteDialog"
+﻿<Window x:Class="GestionDeConges.WPF.Views.Dialogs.ModifierDemandeDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="Modifier un poste"
-        Height="360" Width="450"
+        Title="Modifier la demande"
+        Height="420" Width="450"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Background="{StaticResource BgPageBrush}"
@@ -17,34 +17,41 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="✏️ Modifier le poste"
+        <TextBlock Grid.Row="0" Text="✏️ Modifier la demande"
                    FontSize="18" FontWeight="Bold"
                    Foreground="{StaticResource PrimaryBrush}" Margin="0 0 0 16"/>
 
-        <TextBox Grid.Row="1" x:Name="TxtNom"
-                 materialDesign:HintAssist.Hint="Nom du poste *"
+        <ComboBox Grid.Row="1" x:Name="CboType"
+                  materialDesign:HintAssist.Hint="Type de congé"
+                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                  DisplayMemberPath="Libelle" Margin="0 0 0 12"/>
+
+        <DatePicker Grid.Row="2" x:Name="DpDebut"
+                    materialDesign:HintAssist.Hint="Date de début"
+                    Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                    Margin="0 0 0 12"/>
+
+        <DatePicker Grid.Row="3" x:Name="DpFin"
+                    materialDesign:HintAssist.Hint="Date de fin"
+                    Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                    Margin="0 0 0 12"/>
+
+        <TextBox Grid.Row="4" x:Name="TxtMotif"
+                 materialDesign:HintAssist.Hint="Motif (optionnel)"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                 Height="60" TextWrapping="Wrap" AcceptsReturn="True"
                  Margin="0 0 0 12"/>
 
-        <ComboBox Grid.Row="2" x:Name="CboDepartement"
-                  materialDesign:HintAssist.Hint="Département *"
-                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                  DisplayMemberPath="Nom" Margin="0 0 0 12"/>
-
-        <TextBox Grid.Row="3" x:Name="TxtNbMin"
-                 materialDesign:HintAssist.Hint="Nb min. employés"
-                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                 Margin="0 0 0 16"/>
-
-        <Border Grid.Row="4" x:Name="PanelErreur"
+        <Border Grid.Row="5" x:Name="PanelErreur"
                 Background="#FCEBEB" CornerRadius="6" Padding="12 8"
                 Margin="0 0 0 12" Visibility="Collapsed">
             <TextBlock x:Name="TxtErreur" Foreground="#501313" FontSize="12"/>
         </Border>
 
-        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Annuler" Style="{StaticResource MaterialDesignOutlinedButton}"
                     Width="90" Margin="0 0 8 0" Click="BtnAnnuler_Click"/>
             <Button Content="✔ Modifier" Style="{StaticResource PrimaryButtonStyle}"

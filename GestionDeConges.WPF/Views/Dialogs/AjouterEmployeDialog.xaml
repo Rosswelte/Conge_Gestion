@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Ajouter un employé"
-        Height="550" Width="500"
+        Height="580" Width="500"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Background="{StaticResource BgPageBrush}"
@@ -15,29 +15,21 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Titre -->
-        <StackPanel Grid.Row="0" Margin="0 0 0 20">
-            <TextBlock Text="➕ Nouvel employé"
-                       FontSize="18" FontWeight="Bold"
+        <StackPanel Grid.Row="0" Margin="0 0 0 16">
+            <TextBlock Text="➕ Nouvel employé" FontSize="18" FontWeight="Bold"
                        Foreground="{StaticResource PrimaryBrush}"/>
-            <TextBlock Text="Remplissez les informations du nouvel employé"
-                       FontSize="12"
-                       Foreground="{StaticResource TextMutedBrush}"
-                       Margin="0 4 0 0"/>
         </StackPanel>
 
         <!-- Formulaire -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0 0 0 12">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-
-                <!-- Nom / Prénom -->
                 <Grid Margin="0 0 0 14">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="10"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" x:Name="TxtNom"
@@ -47,74 +39,48 @@
                              materialDesign:HintAssist.Hint="Prénom *"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
                 </Grid>
-
-                <!-- Email -->
-                <TextBox x:Name="TxtEmail"
+                <TextBox x:Name="TxtEmail" Margin="0 0 0 14"
                          materialDesign:HintAssist.Hint="Email *"
-                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                         Margin="0 0 0 14"/>
-
-                <!-- Téléphone -->
-                <TextBox x:Name="TxtTelephone"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                <TextBox x:Name="TxtTelephone" Margin="0 0 0 14"
                          materialDesign:HintAssist.Hint="Téléphone"
-                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                         Margin="0 0 0 14"/>
-
-                <!-- Sexe -->
-                <ComboBox x:Name="CboSexe"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                <ComboBox x:Name="CboSexe" Margin="0 0 0 14"
                           materialDesign:HintAssist.Hint="Sexe"
-                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          Margin="0 0 0 14">
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}">
                     <ComboBoxItem Content="M — Masculin" Tag="M" IsSelected="True"/>
-                    <ComboBoxItem Content="F — Féminin"  Tag="F"/>
-                    <ComboBoxItem Content="Autre"        Tag="Autre"/>
+                    <ComboBoxItem Content="F — Féminin" Tag="F"/>
+                    <ComboBoxItem Content="Autre" Tag="Autre"/>
                 </ComboBox>
-                <!-- Date naissance -->
-                <DatePicker x:Name="DpDateNaissance"
+                <DatePicker x:Name="DpDateNaissance" Margin="0 0 0 14"
                             materialDesign:HintAssist.Hint="Date de naissance"
-                            Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                            Margin="0 0 0 14"/>
-                
-                <!-- Date embauche -->
-                <DatePicker x:Name="DpDateEmbauche"
+                            Style="{StaticResource MaterialDesignOutlinedDatePicker}"/>
+                <DatePicker x:Name="DpDateEmbauche" Margin="0 0 0 14"
                             materialDesign:HintAssist.Hint="Date d'embauche *"
                             Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                             SelectedDate="{x:Static system:DateTime.Today}"
-                            Margin="0 0 0 14"
                             xmlns:system="clr-namespace:System;assembly=mscorlib"/>
-
-                <!-- Poste -->
                 <ComboBox x:Name="CboPoste"
                           materialDesign:HintAssist.Hint="Poste *"
                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          DisplayMemberPath="Nom"
-                          Margin="0 0 0 4"/>
-
+                          DisplayMemberPath="Nom"/>
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Message d'erreur -->
-        <Border Grid.Row="2" x:Name="PanelErreur"
-                Background="#FCEBEB" CornerRadius="6" Padding="12 8"
-                Margin="0 0 0 8" Visibility="Collapsed">
-            <TextBlock x:Name="TxtErreur" Foreground="#501313"
-                       TextWrapping="Wrap" FontSize="12"/>
+        <!-- Erreur -->
+        <Border Grid.Row="2" x:Name="PanelErreur" Background="#FCEBEB"
+                CornerRadius="6" Padding="12 8" Margin="0 8 0 8"
+                Visibility="Collapsed">
+            <TextBlock x:Name="TxtErreur" Foreground="#501313" FontSize="12" TextWrapping="Wrap"/>
         </Border>
 
-        <!-- Spinner -->
-        <ProgressBar Grid.Row="3" x:Name="Spinner"
-                     IsIndeterminate="True" Height="3" Margin="0 0 0 14"
-                     Visibility="Collapsed"/>
-
         <!-- Boutons -->
-        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Annuler"
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Width="100" Margin="0 0 10 0"
-                    Click="BtnAnnuler_Click"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 8 0 0">
+            <Button Content="Annuler" Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Width="100" Margin="0 0 10 0" Click="BtnAnnuler_Click"/>
             <Button x:Name="BtnAjouter" Content="✔  Ajouter"
-                    Style="{StaticResource PrimaryButtonStyle}"
-                    Width="130" Click="BtnAjouter_Click"/>
+                    Style="{StaticResource PrimaryButtonStyle}" Width="130"
+                    Click="BtnAjouter_Click"/>
         </StackPanel>
     </Grid>
 </Window>

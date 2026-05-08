@@ -10,6 +10,11 @@ namespace GestionDeConges.WPF.Views.Pages
         {
             InitializeComponent();
             Loaded += DemandesPage_Loaded;
+            Loaded += async (_, _) =>
+            {
+                if (DataContext is DemandesViewModel vm)
+                    await vm.ChargerCommand.ExecuteAsync(null);
+            };
         }
 
         private async void DemandesPage_Loaded(object sender, RoutedEventArgs e)

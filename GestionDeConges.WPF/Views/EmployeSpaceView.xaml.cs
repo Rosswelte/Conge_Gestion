@@ -16,7 +16,10 @@ public partial class EmployeSpaceView : Window
         DataContext = _vm;
         Loaded += async (_, _) => await _vm.ChargerAsync();
     }
-
+    private async void BtnActualiser_Click(object sender, RoutedEventArgs e)
+    {
+        await _vm.ChargerAsync();
+    }
     private void BtnDeconnexion_Click(object sender, RoutedEventArgs e)
     {
         App.Services.GetRequiredService<SessionService>().FermerSession();

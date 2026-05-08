@@ -207,7 +207,12 @@ public partial class EmployesViewModel : BaseViewModel
         else
             Erreur = resultat.Erreur ?? "Erreur";
     }
-
+    public async Task SupprimerEmployeAsync(Employe employe)
+    {
+        var r = await _employeService.SupprimerAsync(employe.Id, _session.IdCourant);
+        if (r.Succes) await ChargerAsync();
+        else Erreur = r.Erreur ?? "Erreur";
+    }
 
     partial void OnFiltreRechercheChanged(string value)
         => _ = ChargerAsync();
@@ -450,5 +455,23 @@ public partial class EmployeSpaceViewModel : BaseViewModel
         var r = await _demandeService.AnnulerAsync(demande.Id, _session.IdCourant);
         if (r.Succes) await ChargerAsync();
         else Erreur = r.Erreur ?? "Erreur annulation";
+    }
+    // Modifier demande
+    [RelayCommand]
+    private async Task ModifierDemandeAsync(DemandeConge? demande)
+    {
+        if (demande is null || !demande.EstModifiable) return;
+
+        var dialog = new ModifierDemandeDialog(demande, _typeCongeRepo)
+        {
+            Owner = Application.Current.MainWindow
+        };
+
+        if (dialog.ShowDialog() == true && dialog.DemandeModifiee is not null)
+        {
+            var r = await _demandeService.ModifierAsync(dialog.DemandeModifiee);
+            if (r.Succes) { Succes = "Demande modifiée !"; await ChargerAsync(); }
+            else Erreur = r.Erreur ?? "Erreur modification";
+        }
     }
 }

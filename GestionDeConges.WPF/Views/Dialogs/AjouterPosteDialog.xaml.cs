@@ -32,7 +32,7 @@ public partial class AjouterPosteDialog : Window
         { AfficherErreur("Le nom du poste est obligatoire."); return; }
         if (CboDepartement.SelectedItem is not Departement dept)
         { AfficherErreur("Veuillez sélectionner un département."); return; }
-        if (!int.TryParse(TxtNbMin.Text.Trim(), out int nbMin) || nbMin < 0)
+        if (!int.TryParse(TxtNbMin.Text.Trim(), out int nbMin) || nbMin < 1)
         { AfficherErreur("Nombre minimum d'employés invalide."); return; }
 
         PosteCree = new Poste
