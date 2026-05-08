@@ -88,8 +88,8 @@ public partial class ModifierEmployeDialog : Window
         {
             if (!IsValidTelephone(telephone))
             { AfficherErreur("Téléphone invalide (chiffres, espaces, +, -, ., /, ( ) uniquement)."); TxtTelephone.Focus(); return; }
-            if (telephone.Length < 3)
-            { AfficherErreur("Le numéro de téléphone est trop court (min. 3 caractères)."); TxtTelephone.Focus(); return; }
+            if (telephone.Length < 6)
+            { AfficherErreur("Le numéro de téléphone est trop court (min. 6 caractères)."); TxtTelephone.Focus(); return; }
             if (telephone.Length > 20)
             { AfficherErreur("Le numéro de téléphone ne doit pas dépasser 20 caractères."); TxtTelephone.Focus(); return; }
         }
